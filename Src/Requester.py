@@ -185,7 +185,8 @@ def multipleTask(x_min, x_max, y_min, y_max, z, tile_name, task_name, ALLOW_MP=F
     print("[TIME] " + task_name + ": " + str(TIME_END - TIME_START) + "s")
 
 
-def taskGenerator(zoom, tile_name, task_name, x_min=0, x_max=0, y_min=0, y_max=0, MODE="Region", ALLOW_MP=False):
+def taskGenerator(zoom, tile_name, task_name, x_min=0, x_max=0, y_min=0, y_max=0, grid_number=0,
+                  MODE="Region", ALLOW_MP=False):
     if MODE == "Region":
         if zoom == 0:
             print("Error: zoom must be greater than 0 in Region MODE")
@@ -207,5 +208,7 @@ def taskGenerator(zoom, tile_name, task_name, x_min=0, x_max=0, y_min=0, y_max=0
             Count = pow(2, zoom * 2)
             print("Total tiles:", Count)
             multipleTask(0, pow(2, zoom) - 1, 0, pow(2, zoom) - 1, zoom, tile_name, task_name, ALLOW_MP)
+    elif MODE == "Grid":
+        print("Need a parameter")
     else:
         print("Error: MODE Error")
