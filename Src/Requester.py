@@ -4,6 +4,7 @@ import time
 import json
 import random
 import threading
+from math import sqrt
 
 import requests
 
@@ -186,7 +187,7 @@ def multipleTask(x_min, x_max, y_min, y_max, z, tile_name, task_name, ALLOW_MP=F
     print("[TIME] " + task_name + ": " + str(TIME_END - TIME_START) + "s")
 
 
-def taskGenerator(zoom:int, tile_name, task_name, x_min=0, x_max=0, y_min=0, y_max=0, grid_number=0,
+def taskGenerator(zoom:int, tile_name, task_name, x_min=0, x_max=0, y_min=0, y_max=0, grid_pos=[0,0],
                   MODE="Region", ALLOW_MP=False):
     # INIT
     global WHITE_LIST
@@ -223,15 +224,18 @@ def taskGenerator(zoom:int, tile_name, task_name, x_min=0, x_max=0, y_min=0, y_m
     elif MODE == "Grid":
         tolerance_zoom=8
         grid_zoom = int(pow(2, int(zoom - tolerance_zoom+1)))//2
+        grid_number=0
+        if zoom>=10:
+            # grid_zoom=pow(2,int(zoom-tolerance_zoom))//(pow(2,int(sqrt(tolerance_zoom))))
+            grid_zoom=int(sqrt(int(pow(2, int(zoom - tolerance_zoom+1)))//2))
         if grid_zoom<=0:
             grid_zoom=0
-        # grid_zoom=pow(2,int(zoom-tolerance_zoom))//pow(2,tolerance_zoom//2)
+
 
         if grid_zoom <= 1:
             grid_number = int(pow(2, grid_zoom//2))
         else:
             grid_number = int(pow(2, grid_zoom))
-        # grid_number=int(pow(2,grid_zoom//pow(2,tolerance_zoom//2)))
 
         print("zoom:",zoom)
         print("grid_zoom:",grid_zoom)
