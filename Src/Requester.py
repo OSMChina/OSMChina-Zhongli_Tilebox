@@ -110,25 +110,25 @@ class singleTileTask(threading.Thread):
             IMG = requests.get(URL, headers=headers)
             filename = str(self.y) + ".png"
 
-            # 修正子进程目录
-            PWD=os.getcwd()
-            # print("PWD:", PWD)
-            import platform
-            if platform.system() == "Windows":
-                PWD_LIST=PWD.split("\\")
-            elif platform.system() == "Linux":
-                PWD_LIST=PWD.split("/")
-            elif platform.system() == "Darwin":
-                PWD_LIST=PWD.split("/")
-            else:
-                PWD_LIST=PWD.split("/")
-            print(PWD_LIST[len(PWD_LIST) - 1], PWD_LIST[len(PWD_LIST) - 2])
-            if PWD_LIST[len(PWD_LIST)-1]!=str(self.x):
-                if PWD_LIST[len(PWD_LIST)-1]!=self.task_name:
-                    os.chdir(self.task_name)
-                    os.chdir(str(self.x))
-                else:
-                    os.chdir(str(self.x))
+            # # 修正子进程目录
+            # PWD=os.getcwd()
+            # # print("PWD:", PWD)
+            # import platform
+            # if platform.system() == "Windows":
+            #     PWD_LIST=PWD.split("\\")
+            # elif platform.system() == "Linux":
+            #     PWD_LIST=PWD.split("/")
+            # elif platform.system() == "Darwin":
+            #     PWD_LIST=PWD.split("/")
+            # else:
+            #     PWD_LIST=PWD.split("/")
+            # print(PWD_LIST[len(PWD_LIST) - 1], PWD_LIST[len(PWD_LIST) - 2])
+            # if PWD_LIST[len(PWD_LIST)-1]!=str(self.x):
+            #     if PWD_LIST[len(PWD_LIST)-1]!=self.task_name:
+            #         os.chdir(self.task_name)
+            #         os.chdir(str(self.x))
+            #     else:
+            #         os.chdir(str(self.x))
 
             with open(filename, "wb") as f:
                 f.write(IMG.content)
@@ -175,9 +175,9 @@ def multipleTask(x_min, x_max, y_min, y_max, z, tile_name, task_name, ALLOW_MP=F
             for y in range(y_min, y_max):
                 tmp = singleTileTask(x, y, z, tile_name, task_name, y)
                 tmp.start()
-                delay=0.1
-                # time.sleep(delay)
                 tmp.join()
+                delay = 0.05
+                time.sleep(delay)
         os.chdir("..")
     os.chdir("..")
 
