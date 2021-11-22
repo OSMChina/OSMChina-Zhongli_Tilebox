@@ -186,7 +186,7 @@ def multipleTask(x_min, x_max, y_min, y_max, z, tile_name, task_name, ALLOW_MP=F
     print("[TIME] " + task_name + ": " + str(TIME_END - TIME_START) + "s")
 
 
-def taskGenerator(zoom, tile_name, task_name, x_min=0, x_max=0, y_min=0, y_max=0, grid_number=0,
+def taskGenerator(zoom:int, tile_name, task_name, x_min=0, x_max=0, y_min=0, y_max=0, grid_number=0,
                   MODE="Region", ALLOW_MP=False):
     # INIT
     global WHITE_LIST
@@ -221,22 +221,23 @@ def taskGenerator(zoom, tile_name, task_name, x_min=0, x_max=0, y_min=0, y_max=0
             print("Total tiles:", Count)
             multipleTask(0, pow(2, zoom) - 1, 0, pow(2, zoom) - 1, zoom, tile_name, task_name, ALLOW_MP)
     elif MODE == "Grid":
-        tolerance_zoom=7
-        Length_Full=pow(2,zoom)
-        Count_Full=Length_Full*Length_Full
-        if Count_Full>=Length_Full*pow(2,tolerance_zoom):
-            if tolerance_zoom/2 == 0:
-                grid_number=Count_Full//(Length_Full*pow(2,(tolerance_zoom//pow(2,2))))
-            else:
-                grid_number=Count_Full//(Length_Full*pow(2,(tolerance_zoom//pow(2,2))))
-            # grid_number=Count_Full//(Length_Full*pow(2,(tolerance_zoom+1)//2))
-            # grid_number=Count_Full//(Length_Full*pow(2,(tolerance_zoom//2)))
-            # grid_number=Count_Full//(Length_Full)
-        if grid_number==0:
-            grid_number=1
+        tolerance_zoom=8
+        grid_zoom = int(pow(2, int(zoom - tolerance_zoom+1)))//2
+        if grid_zoom<=0:
+            grid_zoom=0
+        # grid_zoom=pow(2,int(zoom-tolerance_zoom))//pow(2,tolerance_zoom//2)
+
+        if grid_zoom <= 1:
+            grid_number = int(pow(2, grid_zoom//2))
+        else:
+            grid_number = int(pow(2, grid_zoom))
+        # grid_number=int(pow(2,grid_zoom//pow(2,tolerance_zoom//2)))
+
         print("zoom:",zoom)
-        print("Total tiles:",Count_Full)
-        print("Length_Full",Length_Full)
+        print("grid_zoom:",grid_zoom)
         print("grid_number:",grid_number)
+        Count = pow(2, zoom * 2)
+        print("Total tiles:", Count)
+        print("===")
     else:
         print("Error: MODE Error")
