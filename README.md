@@ -40,7 +40,7 @@ taskGenerator(3, "OSMChina", "测试任务F", MODE="Full")
 - [ ] UA重做
 - [ ] 多组件
     - [x] 多组件-模块化
-    - [ ] 多组件-数据源分离
+    - [x] 多组件-数据源分离
     - [ ] 多组件-Combiner
     - [ ] 多组件-Viewer
 - [ ] 多线程

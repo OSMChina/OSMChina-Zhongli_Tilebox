@@ -221,6 +221,22 @@ def taskGenerator(zoom, tile_name, task_name, x_min=0, x_max=0, y_min=0, y_max=0
             print("Total tiles:", Count)
             multipleTask(0, pow(2, zoom) - 1, 0, pow(2, zoom) - 1, zoom, tile_name, task_name, ALLOW_MP)
     elif MODE == "Grid":
-        print("Need a parameter")
+        tolerance_zoom=7
+        Length_Full=pow(2,zoom)
+        Count_Full=Length_Full*Length_Full
+        if Count_Full>=Length_Full*pow(2,tolerance_zoom):
+            if tolerance_zoom/2 == 0:
+                grid_number=Count_Full//(Length_Full*pow(2,(tolerance_zoom//pow(2,2))))
+            else:
+                grid_number=Count_Full//(Length_Full*pow(2,(tolerance_zoom//pow(2,2))))
+            # grid_number=Count_Full//(Length_Full*pow(2,(tolerance_zoom+1)//2))
+            # grid_number=Count_Full//(Length_Full*pow(2,(tolerance_zoom//2)))
+            # grid_number=Count_Full//(Length_Full)
+        if grid_number==0:
+            grid_number=1
+        print("zoom:",zoom)
+        print("Total tiles:",Count_Full)
+        print("Length_Full",Length_Full)
+        print("grid_number:",grid_number)
     else:
         print("Error: MODE Error")
