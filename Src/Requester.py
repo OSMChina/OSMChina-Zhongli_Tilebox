@@ -1,28 +1,14 @@
 import os
 import random
 import requests
+import json
 
 import threading
 import time
 
-WHITE_LIST = [
-    "osmchina.org"
-]
+WHITE_LIST = json.loads(open('control_list.json').read())['WHITE_LIST']
 
-TILE_SERVER = {
-    "OSMChina": ["{protocol}{random}tile.osmchina.org/{z}/{x}/{y}{retina}.png{apikey}",
-                 ["https", "http"],  # {protocol}
-                 "",  # {random}
-                 [""],  # {retina}
-                 ""  # {apikey}
-                 ],
-    "Teacestrack": ["{protocol}{random}tile.tracestrack.org/{z}/{x}/{y}{retina}.png{apikey}",
-                    ["https", "http"],  # {protocol}
-                    "a-c",  # {random}
-                    ["1.0", "1.5", "2.0"],  # {retina}
-                    "?apikey=9f8f8f8f-9f8f-9f8f-9f8f-9f8f8f8f8f8"  # {apikey}
-                    ]
-}
+TILE_SERVER = json.loads(open('tile_server.json').read())
 
 headers = {
     "User-Agent": "OSMChina-TileRequest/0.3.0",
