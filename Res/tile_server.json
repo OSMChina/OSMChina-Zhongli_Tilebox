@@ -1,16 +1,20 @@
 {
+    "Simple": ["{protocol}{random}tile.domain/{z}/{x}/{y}{retina}.png{apikey}",
+               ["protocol", "http"],
+               "random",
+               ["retina"],
+               "apikey"
+               ],
     "OSMChina": ["{protocol}{random}tile.osmchina.org/{z}/{x}/{y}{retina}.png{apikey}",
-                 ["https", "http"],  // {protocol}
-                 "",  // {random}
-                 [""],  // {retina}
-                 ""  // {apikey}
+                 ["https", "http"],
+                 "",
+                 [""],
+                 ""
                  ],
     "Teacestrack": ["{protocol}{random}tile.tracestrack.org/{z}/{x}/{y}{retina}.png{apikey}",
-                    ["https", "http"],  // {protocol}
-                    "a-c",  // {random}
-                    ["1.0", "1.5", "2.0"],  // {retina}
-                    "?apikey=9f8f8f8f-9f8f-9f8f-9f8f-9f8f8f8f8f8"  // {apikey}
+                    ["https", "http"],
+                    "a-c",
+                    ["1.0", "1.5", "2.0"],
+                    "?apikey=9f8f8f8f-9f8f-9f8f-9f8f-9f8f8f8f8f8"
                     ]
-  // WRONG TEMELETE:
-  //"http://t0.tianditu.com/vec_c/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=vec&STYLE=default&TILEMATRIXSET=c&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}"
 }

@@ -1,14 +1,29 @@
 import os
-import random
-import requests
-import json
-
-import threading
+import platform
 import time
+import json
+import random
+import threading
 
-WHITE_LIST = json.loads(open('control_list.json').read())['WHITE_LIST']
+import requests
 
-TILE_SERVER = json.loads(open('tile_server.json').read())
+global WHITE_LIST
+global TILE_SERVER
+
+def UA():
+    PROGRAME_NAME="OSMChina-TileRequest"
+    PROGRAME_VERSION="0.3.0"
+    PLATFORM_SYSTEM=platform.system()
+    PLATFORM_VERSION=platform.version()
+    PLATFORM_MACHINE=platform.machine()
+    PLATFORM_PYTHON=platform.python_version()
+    UA_BASIC= PROGRAME_NAME+"/"+PROGRAME_VERSION
+    UA_EXTEND="("\
+              +PLATFORM_SYSTEM+" "+PLATFORM_VERSION+"; "\
+              +PLATFORM_MACHINE+"; "\
+              +")"\
+              +" Python/"+PLATFORM_PYTHON
+    return UA_BASIC+" "+UA_EXTEND
 
 headers = {
     "User-Agent": "OSMChina-TileRequest/0.3.0",
@@ -173,6 +188,17 @@ def multipleTask(x_min, x_max, y_min, y_max, z, tile_name, task_name, ALLOW_MP=F
 
 def taskGenerator(zoom, tile_name, task_name, x_min=0, x_max=0, y_min=0, y_max=0, grid_number=0,
                   MODE="Region", ALLOW_MP=False):
+    # INIT
+    global WHITE_LIST
+    global TILE_SERVER
+    headers["User-Agent"]=UA()
+    if platform.system() == "Windows":
+        WHITE_LIST = json.loads(open('..\\Res\\control_list.json').read())['WHITE_LIST']
+        TILE_SERVER = json.loads(open('..\\Res\\tile_server.json').read())
+    else:
+        WHITE_LIST = json.loads(open('../Res/control_list.json').read())['WHITE_LIST']
+        TILE_SERVER = json.loads(open('../Res/tile_server.json').read())
+    # TASK
     if MODE == "Region":
         if zoom == 0:
             print("Error: zoom must be greater than 0 in Region MODE")
