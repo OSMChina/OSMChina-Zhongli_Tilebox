@@ -222,21 +222,24 @@ def taskGenerator(zoom:int, tile_name, task_name, x_min=0, x_max=0, y_min=0, y_m
             print("Total tiles:", Count)
             multipleTask(0, pow(2, zoom) - 1, 0, pow(2, zoom) - 1, zoom, tile_name, task_name, ALLOW_MP)
     elif MODE == "Grid":
-        tolerance_zoom=8
+        def findNearstPow2(x:int):
+            for i in range(19):
+                if pow(2, i) >= x:
+                    return pow(2,i)
+        tolerance_zoom=7
         grid_zoom = int(pow(2, int(zoom - tolerance_zoom+1)))//2
-        grid_number=0
         if zoom>=10:
-            # grid_zoom=pow(2,int(zoom-tolerance_zoom))//(pow(2,int(sqrt(tolerance_zoom))))
-            grid_zoom=int(sqrt(int(pow(2, int(zoom - tolerance_zoom+1)))//2))
+            grid_zoom=findNearstPow2(int(sqrt(int(pow(3, int(zoom - tolerance_zoom+1)))//1.5)))
         if grid_zoom<=0:
             grid_zoom=0
-
-
         if grid_zoom <= 1:
+            grid_number = int(pow(2, grid_zoom//2))
+        elif zoom>=10:
             grid_number = int(pow(2, grid_zoom//2))
         else:
             grid_number = int(pow(2, grid_zoom))
-
+        if grid_number >65536:
+            grid_number = 65536*pow(2,findNearstPow2(zoom-tolerance_zoom-3))
         print("zoom:",zoom)
         print("grid_zoom:",grid_zoom)
         print("grid_number:",grid_number)
