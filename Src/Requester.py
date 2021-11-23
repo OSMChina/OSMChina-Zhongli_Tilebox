@@ -111,32 +111,10 @@ class singleTileTask(threading.Thread):
         self.threadID = threadID
 
     def run(self):
-        # 开始请求 下面这段全是copilot干的好事
         try:
             URL = fullURL(self.x, self.y, self.z, self.tile_name)
             IMG = requests.get(URL, headers=headers)
             filename = str(self.y) + ".png"
-
-            # # 修正子进程目录
-            # PWD=os.getcwd()
-            # # print("PWD:", PWD)
-            # import platform
-            # if platform.system() == "Windows":
-            #     PWD_LIST=PWD.split("\\")
-            # elif platform.system() == "Linux":
-            #     PWD_LIST=PWD.split("/")
-            # elif platform.system() == "Darwin":
-            #     PWD_LIST=PWD.split("/")
-            # else:
-            #     PWD_LIST=PWD.split("/")
-            # print(PWD_LIST[len(PWD_LIST) - 1], PWD_LIST[len(PWD_LIST) - 2])
-            # if PWD_LIST[len(PWD_LIST)-1]!=str(self.x):
-            #     if PWD_LIST[len(PWD_LIST)-1]!=self.task_name:
-            #         os.chdir(self.task_name)
-            #         os.chdir(str(self.x))
-            #     else:
-            #         os.chdir(str(self.x))
-
             with open(filename, "wb") as f:
                 f.write(IMG.content)
             if IMG.status_code == 200:
