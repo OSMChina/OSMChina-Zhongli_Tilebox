@@ -1,5 +1,8 @@
 # OSMChina-Zhongli_Tilebox
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/09550a3454354189bd3963a89dd0a422)](https://www.codacy.com/gh/OSMChina/OSMChina-Zhongli_Tilebox/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=OSMChina/OSMChina-Zhongli_Tilebox&amp;utm_campaign=Badge_Grade)
+<!-- ![FOSSA Status] -->
+
 ## 介绍
 
 >
