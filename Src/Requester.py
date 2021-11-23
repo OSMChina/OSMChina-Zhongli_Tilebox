@@ -45,45 +45,45 @@ def fullURL(x: int, y: int, z: int, tile_name):
     PROTOCOL_PREFIX_HTTPS = "https://"
     PROTOCOL_PREFIX_HTTP = "http://"
     PROTOCOL_PREFIX_FTP = "ftp://"
-    # ?????????
+    # 开始组装准备
     URL = TILE_SERVER[tile_name][0]
-    # ???URL?????
+    # 检查URL是否合法
     for i in WHITE_LIST:
         if i in URL:
             break
     else:
         print("Error: Not OSMChina tile service!")
-    # ?????�I?????
+    # 复杂替换预配置
     Protocol_list = TILE_SERVER[tile_name][1]
     if TILE_SERVER[tile_name][2] != "":
         Random_list = [TILE_SERVER[tile_name][2].split(
             "-")[0], TILE_SERVER[tile_name][2].split("-")[1]]
     else:
         Random_list = ""
-    # ???��??
+    # 组装协议
     if Protocol_list[0] == "https":
         URL = URL.replace("{protocol}", PROTOCOL_PREFIX_HTTPS)
     elif Protocol_list[0] == "ftp":
         URL = URL.replace("{protocol}", PROTOCOL_PREFIX_FTP)
     else:
         URL = URL.replace("{protocol}", PROTOCOL_PREFIX_HTTP)
-    # ??????????
+    # 组装负载均衡
     if Random_list != "":
         URL = URL.replace("{random}", RandomChar(
             Random_list[0], Random_list[1]) + ".")
     else:
         URL = URL.replace("{random}", "")
-    # ??????????
+    # 组装瓦片坐标
     URL = URL.replace("{x}", str(x))
     URL = URL.replace("{y}", str(y))
     URL = URL.replace("{z}", str(z))
-    # ???Retina????? ???????????
+    # 组装Retina分辨率 优先最大分辨率
     if TILE_SERVER[tile_name][3][0] != "":
         URL = URL.replace(
             "{retina}", "@" + TILE_SERVER[tile_name][3][len(TILE_SERVER[tile_name][3]) - 1] + "x")
     else:
         URL = URL.replace("{retina}", "")
-    # ???APIKEY
+    # 组装APIKEY
     if TILE_SERVER[tile_name][4] != "":
         URL = URL.replace("{apikey}", TILE_SERVER[tile_name][4])
     else:
@@ -111,13 +111,13 @@ class singleTileTask(threading.Thread):
         self.threadID = threadID
 
     def run(self):
-        # ??????? ??????????copilot??????
+        # 开始请求 下面这段全是copilot干的好事
         try:
             URL = fullURL(self.x, self.y, self.z, self.tile_name)
             IMG = requests.get(URL, headers=headers)
             filename = str(self.y) + ".png"
 
-            # # ???????????
+            # # 修正子进程目录
             # PWD=os.getcwd()
             # # print("PWD:", PWD)
             # import platform
