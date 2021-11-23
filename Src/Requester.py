@@ -19,13 +19,13 @@ def UA():
     PLATFORM_VERSION = platform.version()
     PLATFORM_MACHINE = platform.machine()
     PLATFORM_PYTHON = platform.python_version()
-    UA_BASIC = PROGRAME_NAME+"/"+PROGRAME_VERSION
-    UA_EXTEND = "("\
-        + PLATFORM_SYSTEM+" "+PLATFORM_VERSION+"; "\
-        + PLATFORM_MACHINE+"; "\
-        + ")"\
-        + " Python/"+PLATFORM_PYTHON
-    return UA_BASIC+" "+UA_EXTEND
+    UA_BASIC = PROGRAME_NAME + "/" + PROGRAME_VERSION
+    UA_EXTEND = "(" \
+                + PLATFORM_SYSTEM + " " + PLATFORM_VERSION + "; " \
+                + PLATFORM_MACHINE + "; " \
+                + ")" \
+                + " Python/" + PLATFORM_PYTHON
+    return UA_BASIC + " " + UA_EXTEND
 
 
 headers = {
@@ -170,8 +170,8 @@ def multipleTask(x_min, x_max, y_min, y_max, z, tile_name, task_name, ALLOW_MP=F
     print("[TIME] " + task_name + ": " + str(time_end - time_start) + "s")
 
 
-def taskGenerator(zoom: int, tile_name, task_name, x_min=0, x_max=0, y_min=0, y_max=0, grid_pos=[0, 0],
-                  MODE="Region", ALLOW_MP=False):
+def taskGenerator(zoom: int, tile_name, task_name, x_min=0, x_max=0, y_min=0, y_max=0,
+                  grid_pos=(0, 0), MODE="Region", ALLOW_MP=False):
     # INIT
     global WHITE_LIST
     global TILE_SERVER
@@ -213,21 +213,22 @@ def taskGenerator(zoom: int, tile_name, task_name, x_min=0, x_max=0, y_min=0, y_
             for i in range(19):
                 if pow(2, i) >= x:
                     return pow(2, i)
+
         tolerance_zoom = 7
-        grid_zoom = int(pow(2, int(zoom - tolerance_zoom+1)))//2
+        grid_zoom = int(pow(2, int(zoom - tolerance_zoom + 1))) // 2
         if zoom >= 10:
             grid_zoom = findNearstPow2(
-                int(sqrt(int(pow(3, int(zoom - tolerance_zoom+1)))//1.5)))
+                int(sqrt(int(pow(3, int(zoom - tolerance_zoom + 1))) // 1.5)))
         if grid_zoom <= 0:
             grid_zoom = 0
         if grid_zoom <= 1:
-            grid_number = int(pow(2, grid_zoom//2))
+            grid_number = int(pow(2, grid_zoom // 2))
         elif zoom >= 10:
-            grid_number = int(pow(2, grid_zoom//2))
+            grid_number = int(pow(2, grid_zoom // 2))
         else:
             grid_number = int(pow(2, grid_zoom))
         if grid_number > 65536:
-            grid_number = 65536*pow(2, findNearstPow2(zoom-tolerance_zoom-3))
+            grid_number = 65536 * pow(2, findNearstPow2(zoom - tolerance_zoom - 3))
         print("zoom:", zoom)
         print("grid_zoom:", grid_zoom)
         print("grid_number:", grid_number)
