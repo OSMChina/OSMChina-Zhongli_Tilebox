@@ -8,13 +8,13 @@ import requests
 
 
 
-def RandomChar(begin: str, end: str):
+def get_random_char(begin: str, end: str):
     range = int(ord(end) - ord(begin))
     tmp = random.randint(0, range - 1)
     return chr(ord(begin) + tmp)
 
 
-def fullURL(x: int, y: int, z: int, tile_name):
+def full_url(x: int, y: int, z: int, tile_name):
     # PREFIX
     PROTOCOL_PREFIX_HTTPS = "https://"
     PROTOCOL_PREFIX_HTTP = "http://"
@@ -43,7 +43,7 @@ def fullURL(x: int, y: int, z: int, tile_name):
         url = url.replace("{protocol}", PROTOCOL_PREFIX_HTTP)
     # 组装负载均衡
     if random_list != "":
-        url = url.replace("{random}", RandomChar(
+        url = url.replace("{random}", get_random_char(
             random_list[0], random_list[1]) + ".")
     else:
         url = url.replace("{random}", "")
@@ -86,7 +86,7 @@ class singleTileTask(threading.Thread):
 
     def run(self):
         try:
-            url = fullURL(self.x, self.y, self.z, self.tile_name)
+            url = full_url(self.x, self.y, self.z, self.tile_name)
             img = requests.get(url, headers=headers)
             filename = str(self.y) + ".png"
             with open(filename, "wb") as f:
@@ -100,8 +100,8 @@ class singleTileTask(threading.Thread):
         exit(0)
 
 
-def atomicTask(x: int, y: int, z: int, tile_name: str):
-    url = fullURL(x, y, z, tile_name)
+def atomic_requester_task(x: int, y: int, z: int, tile_name: str):
+    url = full_url(x, y, z, tile_name)
     img = requests.get(url=url, headers=headers)
     filename = str(y) + ".png"
     with open(filename, "wb") as f:
@@ -123,7 +123,7 @@ def request_task(x_min, x_max, y_min, y_max, z, tile_name, task_name, ALLOW_MP=F
         os.chdir(str(x))
         if ALLOW_MP == False:
             for y in range(y_min, y_max):
-                atomicTask(x, y, z, tile_name)
+                atomic_requester_task(x, y, z, tile_name)
         else:
             MAX_CONNECTION = 16
             MIN_CONNECTION = 1

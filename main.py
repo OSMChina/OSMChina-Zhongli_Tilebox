@@ -3,7 +3,7 @@ import platform
 import json
 from math import sqrt
 
-from Src.Requester import request_task
+from src.requester import request_task
 
 global WHITE_LIST
 global TILE_SERVER
@@ -30,20 +30,20 @@ headers = {
     "Cookie": "",
 }
 
-def taskGenerator(zoom: int, tile_name, task_name, x_min=0, x_max=0, y_min=0, y_max=0,
+def taskGenerator(task:str, zoom: int, tile_name, task_name, x_min=0, x_max=0, y_min=0, y_max=0,
                   grid_pos=(0, 0), MODE="Region", ALLOW_MP=False):
     # INIT
     global WHITE_LIST
     global TILE_SERVER
     headers["User-Agent"] = UA()
     if platform.system() == "Windows":
-        WHITE_LIST = json.loads(open('..\\Res\\control_list.json').read())[
+        WHITE_LIST = json.loads(open('..\\res\\control_list.json').read())[
             'WHITE_LIST']
-        TILE_SERVER = json.loads(open('..\\Res\\tile_server.json').read())
+        TILE_SERVER = json.loads(open('..\\res\\tile_server.json').read())
     else:
         WHITE_LIST = json.loads(
-            open('../Res/control_list.json').read())['WHITE_LIST']
-        TILE_SERVER = json.loads(open('../Res/tile_server.json').read())
+            open('../res/control_list.json').read())['WHITE_LIST']
+        TILE_SERVER = json.loads(open('../res/tile_server.json').read())
     # TASK
     if MODE == "Region":
         if zoom == 0:
@@ -107,4 +107,4 @@ if __name__ == "__main__":
     LOW_ZOOM = 0
     HIGH_ZOOM = 11
     for i in range(LOW_ZOOM, HIGH_ZOOM + 1):
-        taskGenerator(i, "OSMChina", "OSMChina_" + TASK_MODE + "_" + str(i), MODE="Grid", ALLOW_MP=False)
+        taskGenerator("requester",i, "OSMChina", "OSMChina_" + TASK_MODE + "_" + str(i), MODE="Grid", ALLOW_MP=False)
