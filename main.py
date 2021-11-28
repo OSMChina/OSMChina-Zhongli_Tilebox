@@ -17,11 +17,18 @@ def UA():
     PLATFORM_MACHINE = platform.machine()
     PLATFORM_PYTHON = platform.python_version()
     UA_BASIC = PROGRAME_NAME + "/" + PROGRAME_VERSION
-    UA_EXTEND = "(" \
-                + PLATFORM_SYSTEM + " " + PLATFORM_VERSION + "; " \
-                + PLATFORM_MACHINE + "; " \
-                + ")" \
-                + " Python/" + PLATFORM_PYTHON
+    UA_EXTEND = (
+        "("
+        + PLATFORM_SYSTEM
+        + " "
+        + PLATFORM_VERSION
+        + "; "
+        + PLATFORM_MACHINE
+        + "; "
+        + ")"
+        + " Python/"
+        + PLATFORM_PYTHON
+    )
     return UA_BASIC + " " + UA_EXTEND
 
 
@@ -30,20 +37,30 @@ headers = {
     "Cookie": "",
 }
 
-def taskGenerator(task:str, zoom: int, tile_name, task_name, x_min=0, x_max=0, y_min=0, y_max=0,
-                  grid_pos=(0, 0), MODE="Region", ALLOW_MP=False):
+
+def taskGenerator(
+    task: str,
+    zoom: int,
+    tile_name,
+    task_name,
+    x_min=0,
+    x_max=0,
+    y_min=0,
+    y_max=0,
+    grid_pos=(0, 0),
+    MODE="Region",
+    ALLOW_MP=False,
+):
     # INIT
     global WHITE_LIST
     global TILE_SERVER
     headers["User-Agent"] = UA()
     if platform.system() == "Windows":
-        WHITE_LIST = json.loads(open('..\\res\\control_list.json').read())[
-            'WHITE_LIST']
-        TILE_SERVER = json.loads(open('..\\res\\tile_server.json').read())
+        WHITE_LIST = json.loads(open("..\\res\\control_list.json").read())["WHITE_LIST"]
+        TILE_SERVER = json.loads(open("..\\res\\tile_server.json").read())
     else:
-        WHITE_LIST = json.loads(
-            open('../res/control_list.json').read())['WHITE_LIST']
-        TILE_SERVER = json.loads(open('../res/tile_server.json').read())
+        WHITE_LIST = json.loads(open("../res/control_list.json").read())["WHITE_LIST"]
+        TILE_SERVER = json.loads(open("../res/tile_server.json").read())
     # TASK
     if MODE == "Region":
         if zoom == 0:
@@ -56,8 +73,9 @@ def taskGenerator(task:str, zoom: int, tile_name, task_name, x_min=0, x_max=0, y
                 y_max = int(input("Please input y_max:"))
             count = (x_max - x_min + 1) * (y_max - y_min + 1)
             print("Total tiles:", count)
-            request_task(x_min, x_max, y_min, y_max, zoom,
-                         tile_name, task_name, ALLOW_MP)
+            request_task(
+                x_min, x_max, y_min, y_max, zoom, tile_name, task_name, ALLOW_MP
+            )
     elif MODE == "Full":
         if zoom == 0:
             count = 1
@@ -66,9 +84,18 @@ def taskGenerator(task:str, zoom: int, tile_name, task_name, x_min=0, x_max=0, y
         else:
             count = pow(2, zoom * 2)
             print("Total tiles:", count)
-            request_task(0, pow(2, zoom) - 1, 0, pow(2, zoom) -
-                         1, zoom, tile_name, task_name, ALLOW_MP)
+            request_task(
+                0,
+                pow(2, zoom) - 1,
+                0,
+                pow(2, zoom) - 1,
+                zoom,
+                tile_name,
+                task_name,
+                ALLOW_MP,
+            )
     elif MODE == "Grid":
+
         def findNearstPow2(x: int):
             for i in range(19):
                 if pow(2, i) >= x:
@@ -78,7 +105,8 @@ def taskGenerator(task:str, zoom: int, tile_name, task_name, x_min=0, x_max=0, y
         grid_zoom = int(pow(2, int(zoom - tolerance_zoom + 1))) // 2
         if zoom >= 10:
             grid_zoom = findNearstPow2(
-                int(sqrt(int(pow(3, int(zoom - tolerance_zoom + 1))) // 1.5)))
+                int(sqrt(int(pow(3, int(zoom - tolerance_zoom + 1))) // 1.5))
+            )
         if grid_zoom <= 0:
             grid_zoom = 0
         if grid_zoom <= 1:
@@ -107,4 +135,11 @@ if __name__ == "__main__":
     LOW_ZOOM = 0
     HIGH_ZOOM = 11
     for i in range(LOW_ZOOM, HIGH_ZOOM + 1):
-        taskGenerator("requester",i, "OSMChina", "OSMChina_" + TASK_MODE + "_" + str(i), MODE="Grid", ALLOW_MP=False)
+        taskGenerator(
+            "requester",
+            i,
+            "OSMChina",
+            "OSMChina_" + TASK_MODE + "_" + str(i),
+            MODE="Grid",
+            ALLOW_MP=False,
+        )
