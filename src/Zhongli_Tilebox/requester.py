@@ -143,7 +143,7 @@ def requester_task(
     for x in range(x_min, x_max):
         os.mkdir(str(x))
         os.chdir(str(x))
-        if ALLOW_MP == False:
+        if allow_multi_processor is False:
             for y in range(y_min, y_max):
                 requester_action_single(x, y, z, tile_name, headers)
         else:
