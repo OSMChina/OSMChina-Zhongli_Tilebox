@@ -7,7 +7,6 @@ import time
 import requests
 
 
-
 def get_random_char(begin: str, end: str):
     range = int(ord(end) - ord(begin))
     tmp = random.randint(0, range - 1)
@@ -30,8 +29,10 @@ def full_url(x: int, y: int, z: int, tile_name):
     # 复杂替换预配置
     protocol_list = TILE_SERVER[tile_name][1]
     if TILE_SERVER[tile_name][2] != "":
-        random_list = [TILE_SERVER[tile_name][2].split(
-            "-")[0], TILE_SERVER[tile_name][2].split("-")[1]]
+        random_list = [
+            TILE_SERVER[tile_name][2].split("-")[0],
+            TILE_SERVER[tile_name][2].split("-")[1],
+        ]
     else:
         random_list = ""
     # 组装协议
@@ -43,8 +44,9 @@ def full_url(x: int, y: int, z: int, tile_name):
         url = url.replace("{protocol}", PROTOCOL_PREFIX_HTTP)
     # 组装负载均衡
     if random_list != "":
-        url = url.replace("{random}", get_random_char(
-            random_list[0], random_list[1]) + ".")
+        url = url.replace(
+            "{random}", get_random_char(random_list[0], random_list[1]) + "."
+        )
     else:
         url = url.replace("{random}", "")
     # 组装瓦片坐标
@@ -54,7 +56,9 @@ def full_url(x: int, y: int, z: int, tile_name):
     # 组装Retina分辨率 优先最大分辨率
     if TILE_SERVER[tile_name][3][0] != "":
         url = url.replace(
-            "{retina}", "@" + TILE_SERVER[tile_name][3][len(TILE_SERVER[tile_name][3]) - 1] + "x")
+            "{retina}",
+            "@" + TILE_SERVER[tile_name][3][len(TILE_SERVER[tile_name][3]) - 1] + "x",
+        )
     else:
         url = url.replace("{retina}", "")
     # 组装APIKEY
@@ -75,7 +79,9 @@ class singleTileTask(threading.Thread):
     threadID = 0
 
     # INIT
-    def __init__(self, x: int, y: int, z: int, tile_name: str, task_name: str, threadID: int):
+    def __init__(
+        self, x: int, y: int, z: int, tile_name: str, task_name: str, threadID: int
+    ):
         super().__init__()
         self.x = x
         self.y = y
