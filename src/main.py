@@ -3,20 +3,20 @@ import platform
 import json
 from math import sqrt
 
-from src.requester import request_task
+from Zhongli_Tilebox.requester import requester_task
 
 global WHITE_LIST
 global TILE_SERVER
 
 
 def UA():
-    PROGRAME_NAME = "OSMChina-TileRequest"
-    PROGRAME_VERSION = "0.3.0"
+    PROGRAMME_NAME = "OSMChina-TileRequest"
+    PROGRAMME_VERSION = "0.3.0"
     PLATFORM_SYSTEM = platform.system()
     PLATFORM_VERSION = platform.version()
     PLATFORM_MACHINE = platform.machine()
     PLATFORM_PYTHON = platform.python_version()
-    UA_BASIC = PROGRAME_NAME + "/" + PROGRAME_VERSION
+    UA_BASIC = PROGRAMME_NAME + "/" + PROGRAMME_VERSION
     UA_EXTEND = (
         "("
         + PLATFORM_SYSTEM
@@ -41,30 +41,35 @@ headers = {
 def taskGenerator(
     task: str,
     zoom: int,
-    tile_name,
-    task_name,
+    tile_name: str,
+    task_name: str,
     x_min=0,
     x_max=0,
     y_min=0,
     y_max=0,
-    grid_pos=(0, 0),
-    MODE="Region",
-    ALLOW_MP=False,
+    grid_pos_x=0,
+    grid_pos_y=0,
+    mode="Region",
+    allow_multi_processor=False,
 ):
     # INIT
     global WHITE_LIST
     global TILE_SERVER
     headers["User-Agent"] = UA()
     if platform.system() == "Windows":
-        WHITE_LIST = json.loads(open("..\\res\\control_list.json").read())["WHITE_LIST"]
+        WHITE_LIST = json.loads(open("..\\res\\control_list.json").read())[
+            "WHITE_LIST"
+        ]
         TILE_SERVER = json.loads(open("..\\res\\tile_server.json").read())
     else:
-        WHITE_LIST = json.loads(open("../res/control_list.json").read())["WHITE_LIST"]
+        WHITE_LIST = json.loads(open("../res/control_list.json").read())[
+            "WHITE_LIST"
+        ]
         TILE_SERVER = json.loads(open("../res/tile_server.json").read())
     # TASK
-    if MODE == "Region":
+    if mode == "Region":
         if zoom == 0:
-            print("Error: zoom must be greater than 0 in Region MODE")
+            print("Error: zoom must be greater than 0 in Region mode")
         else:
             if x_min == 0 and x_max == 0 and y_min == 0 and y_max == 0:
                 x_min = int(input("Please input x_min:"))
@@ -73,18 +78,25 @@ def taskGenerator(
                 y_max = int(input("Please input y_max:"))
             count = (x_max - x_min + 1) * (y_max - y_min + 1)
             print("Total tiles:", count)
-            request_task(
-                x_min, x_max, y_min, y_max, zoom, tile_name, task_name, ALLOW_MP
+            requester_task(
+                x_min,
+                x_max,
+                y_min,
+                y_max,
+                zoom,
+                tile_name,
+                task_name,
+                allow_multi_processor,
             )
-    elif MODE == "Full":
+    elif mode == "Full":
         if zoom == 0:
             count = 1
             print("Total tiles:", count)
-            request_task(0, 0, 0, 0, 0, tile_name, task_name)
+            requester_task(0, 0, 0, 0, 0, tile_name, task_name, headers)
         else:
             count = pow(2, zoom * 2)
             print("Total tiles:", count)
-            request_task(
+            requester_task(
                 0,
                 pow(2, zoom) - 1,
                 0,
@@ -92,9 +104,9 @@ def taskGenerator(
                 zoom,
                 tile_name,
                 task_name,
-                ALLOW_MP,
+                allow_multi_processor,
             )
-    elif MODE == "Grid":
+    elif mode == "Grid":
 
         def findNearstPow2(x: int):
             for i in range(19):
@@ -116,7 +128,9 @@ def taskGenerator(
         else:
             grid_number = int(pow(2, grid_zoom))
         if grid_number > 65536:
-            grid_number = 65536 * pow(2, findNearstPow2(zoom - tolerance_zoom - 3))
+            grid_number = 65536 * pow(
+                2, findNearstPow2(zoom - tolerance_zoom - 3)
+            )
         print("zoom:", zoom)
         print("grid_zoom:", grid_zoom)
         print("grid_number:", grid_number)
@@ -124,7 +138,7 @@ def taskGenerator(
         print("Total tiles:", count)
         print("===")
     else:
-        print("Error: MODE Error")
+        print("Error: mode Error")
 
 
 if __name__ == "__main__":
@@ -140,6 +154,6 @@ if __name__ == "__main__":
             i,
             "OSMChina",
             "OSMChina_" + TASK_MODE + "_" + str(i),
-            MODE="Grid",
-            ALLOW_MP=False,
+            mode="Grid",
+            allow_multi_processor=False,
         )

@@ -1,23 +1,21 @@
 import os
-import platform
 import random
 import threading
 import time
 
 import requests
 
+from src.main import TILE_SERVER
+from src.main import WHITE_LIST
+
 
 def get_random_char(begin: str, end: str):
-    range = int(ord(end) - ord(begin))
-    tmp = random.randint(0, range - 1)
+    char_range = int(ord(end) - ord(begin))
+    tmp = random.randint(0, char_range - 1)
     return chr(ord(begin) + tmp)
 
 
 def full_url(x: int, y: int, z: int, tile_name):
-    # PREFIX
-    PROTOCOL_PREFIX_HTTPS = "https://"
-    PROTOCOL_PREFIX_HTTP = "http://"
-    PROTOCOL_PREFIX_FTP = "ftp://"
     # 开始组装准备
     url = TILE_SERVER[tile_name][0]
     # 检查URL是否合法
@@ -37,11 +35,11 @@ def full_url(x: int, y: int, z: int, tile_name):
         random_list = ""
     # 组装协议
     if protocol_list[0] == "https":
-        url = url.replace("{protocol}", PROTOCOL_PREFIX_HTTPS)
+        url = url.replace("{protocol}", "https://")
     elif protocol_list[0] == "ftp":
-        url = url.replace("{protocol}", PROTOCOL_PREFIX_FTP)
+        url = url.replace("{protocol}", "http://")
     else:
-        url = url.replace("{protocol}", PROTOCOL_PREFIX_HTTP)
+        url = url.replace("{protocol}", "ftp://")
     # 组装负载均衡
     if random_list != "":
         url = url.replace(
@@ -57,7 +55,9 @@ def full_url(x: int, y: int, z: int, tile_name):
     if TILE_SERVER[tile_name][3][0] != "":
         url = url.replace(
             "{retina}",
-            "@" + TILE_SERVER[tile_name][3][len(TILE_SERVER[tile_name][3]) - 1] + "x",
+            "@"
+            + TILE_SERVER[tile_name][3][len(TILE_SERVER[tile_name][3]) - 1]
+            + "x",
         )
     else:
         url = url.replace("{retina}", "")
@@ -69,44 +69,50 @@ def full_url(x: int, y: int, z: int, tile_name):
     return url
 
 
-class singleTileTask(threading.Thread):
+class Requester_Action_Thread(threading.Thread):
     # DEFAULT
     x = -1
     y = -1
     z = -1
     tile_name = "OSMChina"
-    task_name = "singleTileTask"
-    threadID = 0
+    thread_id = 0
+    headers = {}
 
     # INIT
     def __init__(
-        self, x: int, y: int, z: int, tile_name: str, task_name: str, threadID: int
+        self,
+        x: int,
+        y: int,
+        z: int,
+        tile_name: str,
+        thread_id: int,
+        headers: dict,
     ):
         super().__init__()
         self.x = x
         self.y = y
         self.z = z
         self.tile_name = tile_name
-        self.task_name = task_name
-        self.threadID = threadID
+        self.thread_id = thread_id
+        self.headers = headers
 
     def run(self):
         try:
             url = full_url(self.x, self.y, self.z, self.tile_name)
-            img = requests.get(url, headers=headers)
+            img = requests.get(url, headers=self.headers)
             filename = str(self.y) + ".png"
             with open(filename, "wb") as f:
                 f.write(img.content)
             if img.status_code == 200:
-                print("[Thread " + str(self.threadID) + "][+] " + url)
+                print("[Thread " + str(self.thread_id) + "][+] " + url)
             else:
-                print("[Thread " + str(self.threadID) + "][-] " + url)
+                print("[Thread " + str(self.thread_id) + "][-] " + url)
         except Exception as e:
             print(e)
         exit(0)
 
 
-def atomic_requester_task(x: int, y: int, z: int, tile_name: str):
+def requester_action_single(x: int, y: int, z: int, headers, tile_name: str):
     url = full_url(x, y, z, tile_name)
     img = requests.get(url=url, headers=headers)
     filename = str(y) + ".png"
@@ -115,7 +121,17 @@ def atomic_requester_task(x: int, y: int, z: int, tile_name: str):
     print("[Thread 0][*] " + url)
 
 
-def request_task(x_min, x_max, y_min, y_max, z, tile_name, task_name, ALLOW_MP=False):
+def requester_task(
+    x_min,
+    x_max,
+    y_min,
+    y_max,
+    z,
+    tile_name,
+    task_name,
+    headers,
+    allow_multi_processor=False,
+):
     x_max += 1
     y_max += 1
     os.mkdir(task_name)
@@ -123,22 +139,24 @@ def request_task(x_min, x_max, y_min, y_max, z, tile_name, task_name, ALLOW_MP=F
 
     time_start = time.time()
 
-    # TASKBODY
+    # TASK_BODY
     for x in range(x_min, x_max):
         os.mkdir(str(x))
         os.chdir(str(x))
         if ALLOW_MP == False:
             for y in range(y_min, y_max):
-                atomic_requester_task(x, y, z, tile_name)
+                requester_action_single(x, y, z, tile_name, headers)
         else:
-            MAX_CONNECTION = 16
-            MIN_CONNECTION = 1
-            SEMAPHORE_POOL = threading.BoundedSemaphore(MAX_CONNECTION)
-            QUEUE = []
-            for i in range(y_min, y_max):
-                QUEUE.append(i)
+            # MAX_CONNECTION = 16
+            # MIN_CONNECTION = 1
+            # SEMAPHORE_POOL = threading.BoundedSemaphore(MAX_CONNECTION)
+            # QUEUE = []
+            # for i in range(y_min, y_max):
+            #     QUEUE.append(i)
             for y in range(y_min, y_max):
-                tmp = singleTileTask(x, y, z, tile_name, task_name, y)
+                tmp = Requester_Action_Thread(
+                    x, y, z, tile_name, thread_id=y, headers=headers
+                )
                 tmp.start()
                 tmp.join()
                 delay = 0.05
