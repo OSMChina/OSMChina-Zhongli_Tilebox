@@ -3,8 +3,32 @@ import platform
 import json
 from math import sqrt
 
-from Src.Requester import multipleTask
+from Src.Requester import request_task
 
+global WHITE_LIST
+global TILE_SERVER
+
+
+def UA():
+    PROGRAME_NAME = "OSMChina-TileRequest"
+    PROGRAME_VERSION = "0.3.0"
+    PLATFORM_SYSTEM = platform.system()
+    PLATFORM_VERSION = platform.version()
+    PLATFORM_MACHINE = platform.machine()
+    PLATFORM_PYTHON = platform.python_version()
+    UA_BASIC = PROGRAME_NAME + "/" + PROGRAME_VERSION
+    UA_EXTEND = "(" \
+                + PLATFORM_SYSTEM + " " + PLATFORM_VERSION + "; " \
+                + PLATFORM_MACHINE + "; " \
+                + ")" \
+                + " Python/" + PLATFORM_PYTHON
+    return UA_BASIC + " " + UA_EXTEND
+
+
+headers = {
+    "User-Agent": "OSMChina-TileRequest/0.3.0",
+    "Cookie": "",
+}
 
 def taskGenerator(zoom: int, tile_name, task_name, x_min=0, x_max=0, y_min=0, y_max=0,
                   grid_pos=(0, 0), MODE="Region", ALLOW_MP=False):
@@ -32,17 +56,17 @@ def taskGenerator(zoom: int, tile_name, task_name, x_min=0, x_max=0, y_min=0, y_
                 y_max = int(input("Please input y_max:"))
             count = (x_max - x_min + 1) * (y_max - y_min + 1)
             print("Total tiles:", count)
-            multipleTask(x_min, x_max, y_min, y_max, zoom,
+            request_task(x_min, x_max, y_min, y_max, zoom,
                          tile_name, task_name, ALLOW_MP)
     elif MODE == "Full":
         if zoom == 0:
             count = 1
             print("Total tiles:", count)
-            multipleTask(0, 0, 0, 0, 0, tile_name, task_name)
+            request_task(0, 0, 0, 0, 0, tile_name, task_name)
         else:
             count = pow(2, zoom * 2)
             print("Total tiles:", count)
-            multipleTask(0, pow(2, zoom) - 1, 0, pow(2, zoom) -
+            request_task(0, pow(2, zoom) - 1, 0, pow(2, zoom) -
                          1, zoom, tile_name, task_name, ALLOW_MP)
     elif MODE == "Grid":
         def findNearstPow2(x: int):

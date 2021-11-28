@@ -6,30 +6,6 @@ import time
 
 import requests
 
-global WHITE_LIST
-global TILE_SERVER
-
-
-def UA():
-    PROGRAME_NAME = "OSMChina-TileRequest"
-    PROGRAME_VERSION = "0.3.0"
-    PLATFORM_SYSTEM = platform.system()
-    PLATFORM_VERSION = platform.version()
-    PLATFORM_MACHINE = platform.machine()
-    PLATFORM_PYTHON = platform.python_version()
-    UA_BASIC = PROGRAME_NAME + "/" + PROGRAME_VERSION
-    UA_EXTEND = "(" \
-                + PLATFORM_SYSTEM + " " + PLATFORM_VERSION + "; " \
-                + PLATFORM_MACHINE + "; " \
-                + ")" \
-                + " Python/" + PLATFORM_PYTHON
-    return UA_BASIC + " " + UA_EXTEND
-
-
-headers = {
-    "User-Agent": "OSMChina-TileRequest/0.3.0",
-    "Cookie": "",
-}
 
 
 def RandomChar(begin: str, end: str):
@@ -133,7 +109,7 @@ def atomicTask(x: int, y: int, z: int, tile_name: str):
     print("[Thread 0][*] " + url)
 
 
-def multipleTask(x_min, x_max, y_min, y_max, z, tile_name, task_name, ALLOW_MP=False):
+def request_task(x_min, x_max, y_min, y_max, z, tile_name, task_name, ALLOW_MP=False):
     x_max += 1
     y_max += 1
     os.mkdir(task_name)
