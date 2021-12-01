@@ -107,36 +107,8 @@ def taskGenerator(
                 allow_multi_processor,
             )
     elif mode == "Grid":
-
-        def findNearstPow2(x: int):
-            for i in range(19):
-                if pow(2, i) >= x:
-                    return pow(2, i)
-
-        tolerance_zoom = 7
-        grid_zoom = int(pow(2, int(zoom - tolerance_zoom + 1))) // 2
-        if zoom >= 10:
-            grid_zoom = findNearstPow2(
-                int(sqrt(int(pow(3, int(zoom - tolerance_zoom + 1))) // 1.5))
-            )
-        if grid_zoom <= 0:
-            grid_zoom = 0
-        if grid_zoom <= 1:
-            grid_number = int(pow(2, grid_zoom // 2))
-        elif zoom >= 10:
-            grid_number = int(pow(2, grid_zoom // 2))
-        else:
-            grid_number = int(pow(2, grid_zoom))
-        if grid_number > 65536:
-            grid_number = 65536 * pow(
-                2, findNearstPow2(zoom - tolerance_zoom - 3)
-            )
-        print("zoom:", zoom)
-        print("grid_zoom:", grid_zoom)
-        print("grid_number:", grid_number)
-        count = pow(2, zoom * 2)
-        print("Total tiles:", count)
-        print("===")
+        full_length=pow(2,zoom)
+        full_count = pow(2, zoom * 2)
     else:
         print("Error: mode Error")
 
@@ -150,10 +122,10 @@ if __name__ == "__main__":
     HIGH_ZOOM = 11
     for i in range(LOW_ZOOM, HIGH_ZOOM + 1):
         taskGenerator(
-            "requester",
-            i,
-            "OSMChina",
-            "OSMChina_" + TASK_MODE + "_" + str(i),
+            task="requester",
+            zoom=i,
+            tile_name="OSMChina",
+            task_name="OSMChina_" + TASK_MODE + "_" + str(i),
             mode="Grid",
             allow_multi_processor=False,
         )
