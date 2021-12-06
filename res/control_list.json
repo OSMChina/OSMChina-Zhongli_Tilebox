@@ -2,5 +2,5 @@
     "ALLOW": "WHITE_LIST",
     "DENY": "BLACK_LIST",
     "WHITE_LIST": ["osmchina.org"],
-    "BLACK_LIST": [],
+    "BLACK_LIST": []
 }

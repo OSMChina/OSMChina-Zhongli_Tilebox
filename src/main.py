@@ -53,7 +53,13 @@ def task_generator(
     # TASK_CHOISE
     if task=="requester":
         pass
-    elif
+    elif task=="combiner":
+        combiner_task()
+    elif task=="viewer":
+        viewer_task()
+    else:
+        print("Task Error!")
+        return
     # REQUESTER_TASK
     if mode == "Region":
         if zoom == 0:
