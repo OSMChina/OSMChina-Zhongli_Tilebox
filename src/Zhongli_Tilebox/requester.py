@@ -17,13 +17,6 @@ def get_random_char(begin: str, end: str):
 
 def full_url(x: int, y: int, z: int, tile_name: str):
     # 开始组装准备
-    # print("tile_name", tile_name)
-    # print("TILE_SERVER", TILE_SERVER)
-    # print("type(tile_name)",type(tile_name))
-    # print("type(TILE_SERVER)",type(TILE_SERVER))
-    #
-    # tile_name=str(tile_name)
-
     url = TILE_SERVER[tile_name][0]
     # 检查URL是否合法
     for i in WHITE_LIST:
@@ -119,7 +112,9 @@ class Requester_Action_Thread(threading.Thread):
         exit(0)
 
 
-def requester_action_single(x: int, y: int, z: int, tile_name: str,headers:dict):
+def requester_action_single(
+    x: int, y: int, z: int, tile_name: str, headers: dict
+):
     url = full_url(x, y, z, tile_name)
     img = requests.get(url=url, headers=headers)
     filename = str(y) + ".png"

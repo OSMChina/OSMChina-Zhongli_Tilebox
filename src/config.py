@@ -1,9 +1,6 @@
 import os
 import json
 
-# global WHITE_LIST
-# global TILE_SERVER
-
 pwd = os.path.dirname(os.path.realpath(__file__))
 path_control_list = os.path.join(pwd, "..", "res", "control_list.json")
 path_tile_server = os.path.join(pwd, "..", "res", "tile_server.json")

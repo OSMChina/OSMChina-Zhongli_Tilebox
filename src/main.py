@@ -51,11 +51,11 @@ def task_generator(
     # INIT
     headers["User-Agent"] = useragent_generator()
     # TASK_CHOISE
-    if task=="requester":
+    if task == "requester":
         pass
-    elif task=="combiner":
+    elif task == "combiner":
         combiner_task()
-    elif task=="viewer":
+    elif task == "viewer":
         viewer_task()
     else:
         print("Task Error!")
