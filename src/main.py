@@ -13,7 +13,7 @@ headers = {
 }
 
 
-def UA():
+def useragent_generator():
     PROGRAMME_NAME = "OSMChina-TileRequest"
     PROGRAMME_VERSION = "0.3.0"
     PLATFORM_SYSTEM = platform.system()
@@ -36,7 +36,7 @@ def UA():
     return UA_BASIC + " " + UA_EXTEND
 
 
-def taskGenerator(
+def task_generator(
     task: str,
     zoom: int,
     tile_name: str,
@@ -53,7 +53,7 @@ def taskGenerator(
     # INIT
     global WHITE_LIST
     global TILE_SERVER
-    headers["User-Agent"] = UA()
+    headers["User-Agent"] = useragent_generator()
     if platform.system() == "Windows":
         WHITE_LIST = json.loads(open("..\\res\\control_list.json").read())[
             "WHITE_LIST"
@@ -141,11 +141,11 @@ if __name__ == "__main__":
     LOW_ZOOM = 0
     HIGH_ZOOM = 11
     for i in range(LOW_ZOOM, HIGH_ZOOM + 1):
-        taskGenerator(
+        task_generator(
             task="requester",
             zoom=i,
             tile_name="OSMChina",
             task_name="OSMChina_" + TASK_MODE + "_" + str(i),
-            mode="Grid",
+            mode="Full",
             allow_multi_processor=False,
         )

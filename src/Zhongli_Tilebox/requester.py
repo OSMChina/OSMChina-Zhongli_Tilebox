@@ -15,7 +15,7 @@ def get_random_char(begin: str, end: str):
     return chr(ord(begin) + tmp)
 
 
-def full_url(x: int, y: int, z: int, tile_name):
+def full_url(x: int, y: int, z: int, tile_name: str):
     # 开始组装准备
     url = TILE_SERVER[tile_name][0]
     # 检查URL是否合法
@@ -37,9 +37,9 @@ def full_url(x: int, y: int, z: int, tile_name):
     if protocol_list[0] == "https":
         url = url.replace("{protocol}", "https://")
     elif protocol_list[0] == "ftp":
-        url = url.replace("{protocol}", "http://")
-    else:
         url = url.replace("{protocol}", "ftp://")
+    else:
+        url = url.replace("{protocol}", "http://")
     # 组装负载均衡
     if random_list != "":
         url = url.replace(
