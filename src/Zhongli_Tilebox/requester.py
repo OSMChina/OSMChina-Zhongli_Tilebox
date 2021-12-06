@@ -14,6 +14,8 @@ def get_random_char(begin: str, end: str):
     tmp = random.randint(0, char_range - 1)
     return chr(ord(begin) + tmp)
 
+def url_generator(x: int, y: int, z: int, tile_name: str):
+    pass
 
 def full_url(x: int, y: int, z: int, tile_name: str):
     # 开始组装准备

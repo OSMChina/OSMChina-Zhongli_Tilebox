@@ -52,7 +52,76 @@ def task_generator(
     headers["User-Agent"] = useragent_generator()
     # TASK_CHOISE
     if task == "requester":
-        pass
+        # REQUESTER_TASK
+        if mode == "Region":
+            if zoom == 0:
+                count = 1
+                print("Total tiles:", count)
+                requester_task(
+                    x_min=0,
+                    x_max=0,
+                    y_min=0,
+                    y_max=0,
+                    z=0,
+                    tile_name=tile_name,
+                    task_name=task_name,
+                    headers=headers,
+                    allow_multi_processor=allow_multi_processor,
+                )
+            else:
+                if x_min == 0 and x_max == 0 and y_min == 0 and y_max == 0:
+                    x_min = int(input("Please input x_min:"))
+                    x_max = int(input("Please input x_max:"))
+                    y_min = int(input("Please input y_min:"))
+                    y_max = int(input("Please input y_max:"))
+                count = (x_max - x_min + 1) * (y_max - y_min + 1)
+                print("Total tiles:", count)
+                requester_task(
+                    x_min=x_min,
+                    x_max=x_max,
+                    y_min=y_min,
+                    y_max=y_max,
+                    z=zoom,
+                    tile_name=tile_name,
+                    task_name=task_name,
+                    headers=headers,
+                    allow_multi_processor=allow_multi_processor,
+                )
+        elif mode == "Full":
+            if zoom == 0:
+                count = 1
+                print("Total tiles:", count)
+                requester_task(
+                    x_min=0,
+                    x_max=0,
+                    y_min=0,
+                    y_max=0,
+                    z=0,
+                    tile_name=tile_name,
+                    task_name=task_name,
+                    headers=headers,
+                    allow_multi_processor=allow_multi_processor,
+                )
+            else:
+                count = pow(2, zoom * 2)
+                print("Total tiles:", count)
+                requester_task(
+                    x_min=0,
+                    x_max=pow(2, zoom) - 1,
+                    y_min=0,
+                    y_max=pow(2, zoom) - 1,
+                    z=zoom,
+                    tile_name=tile_name,
+                    task_name=task_name,
+                    headers=headers,
+                    allow_multi_processor=allow_multi_processor,
+                )
+        elif mode == "Grid":
+            full_length = pow(2, zoom)
+            full_count = pow(2, zoom * 2)
+            print(grid_pos_x, grid_pos_y)
+        else:
+            print("Error: mode Error")
     elif task == "combiner":
         combiner_task()
     elif task == "viewer":
@@ -60,75 +129,6 @@ def task_generator(
     else:
         print("Task Error!")
         return
-    # REQUESTER_TASK
-    if mode == "Region":
-        if zoom == 0:
-            count = 1
-            print("Total tiles:", count)
-            requester_task(
-                x_min=0,
-                x_max=0,
-                y_min=0,
-                y_max=0,
-                z=0,
-                tile_name=tile_name,
-                task_name=task_name,
-                headers=headers,
-                allow_multi_processor=allow_multi_processor,
-            )
-        else:
-            if x_min == 0 and x_max == 0 and y_min == 0 and y_max == 0:
-                x_min = int(input("Please input x_min:"))
-                x_max = int(input("Please input x_max:"))
-                y_min = int(input("Please input y_min:"))
-                y_max = int(input("Please input y_max:"))
-            count = (x_max - x_min + 1) * (y_max - y_min + 1)
-            print("Total tiles:", count)
-            requester_task(
-                x_min=x_min,
-                x_max=x_max,
-                y_min=y_min,
-                y_max=y_max,
-                z=zoom,
-                tile_name=tile_name,
-                task_name=task_name,
-                headers=headers,
-                allow_multi_processor=allow_multi_processor,
-            )
-    elif mode == "Full":
-        if zoom == 0:
-            count = 1
-            print("Total tiles:", count)
-            requester_task(
-                x_min=0,
-                x_max=0,
-                y_min=0,
-                y_max=0,
-                z=0,
-                tile_name=tile_name,
-                task_name=task_name,
-                headers=headers,
-                allow_multi_processor=allow_multi_processor,
-            )
-        else:
-            count = pow(2, zoom * 2)
-            print("Total tiles:", count)
-            requester_task(
-                x_min=0,
-                x_max=pow(2, zoom) - 1,
-                y_min=0,
-                y_max=pow(2, zoom) - 1,
-                z=zoom,
-                tile_name=tile_name,
-                task_name=task_name,
-                headers=headers,
-                allow_multi_processor=allow_multi_processor,
-            )
-    elif mode == "Grid":
-        full_length = pow(2, zoom)
-        full_count = pow(2, zoom * 2)
-    else:
-        print("Error: mode Error")
 
 
 if __name__ == "__main__":
