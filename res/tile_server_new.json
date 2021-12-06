@@ -1,6 +1,15 @@
 {
-  "Simple": {
-    "url": "{protocol}{random}tile.domain/{z}/{x}/{y}{retina}.png{apikey}",
+  "OSMChina": {
+    "url": "{protocol}tile.osmchina.org/{z}/{x}/{y}.png",
+    "parameter": {
+      "protocol": [
+        "https",
+        "http"
+      ]
+    }
+  },
+  "Teacestrack": {
+    "url": "{protocol}{random}.tile.tracestrack.org/{z}/{x}/{y}{retina}.png?apikey={apikey}",
     "parameter": {
       "protocol": [
         "https",
@@ -12,33 +21,7 @@
         "1.5",
         "2.0"
       ],
-      "apikey": "0f0f0f0f-0f0f-0f0f-0f0f-0f0f0f0f0f0f"
+      "apikey":"9f8f8f8f-9f8f-9f8f-9f8f-9f8f8f8f8f8"
     }
-  },
-  "OSMChina": [
-    "{protocol}{random}tile.osmchina.org/{z}/{x}/{y}{retina}.png{apikey}",
-    [
-      "https",
-      "http"
-    ],
-    "",
-    [
-      ""
-    ],
-    ""
-  ],
-  "Teacestrack": [
-    "{protocol}{random}tile.tracestrack.org/{z}/{x}/{y}{retina}.png{apikey}",
-    [
-      "https",
-      "http"
-    ],
-    "a-c",
-    [
-      "1.0",
-      "1.5",
-      "2.0"
-    ],
-    "?apikey=9f8f8f8f-9f8f-9f8f-9f8f-9f8f8f8f8f8"
-  ]
+  }
 }

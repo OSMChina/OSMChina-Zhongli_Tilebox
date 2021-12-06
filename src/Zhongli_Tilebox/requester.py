@@ -14,28 +14,28 @@ def get_random_char(begin: str, end: str):
     tmp = random.randint(0, char_range - 1)
     return chr(ord(begin) + tmp)
 
+
 def url_generator(x: int, y: int, z: int, tile_name: str):
-    # 开始组装准备
-    url=TILE_SERVER[tile_name]["url"]
-    # 检查URL是否合法
-    # 本部分同旧版
+    # URL
+    url = TILE_SERVER[tile_name]["url"]
+    # URL_WHITE_LIST
     for i in WHITE_LIST:
         if i in url:
             break
     else:
         print("Error: Not OSMChina tile service!")
-    # 复杂替换开始
-    parameter=TILE_SERVER[tile_name]["parameter"]
-    # {protocol}
+    # PARAMETER
+    parameter = TILE_SERVER[tile_name]["parameter"]
+    # {protocol} - Mandatory
     if parameter["protocol"][0] == "https":
         url = url.replace("{protocol}", "https://")
     elif parameter["protocol"][0] == "ftp":
         url = url.replace("{protocol}", "ftp://")
     else:
         url = url.replace("{protocol}", "http://")
-    # {random}
+    # {random} - Optional
     if "random" in parameter:
-        random_list=[
+        random_list = [
             parameter["random"].split("-")[0],
             parameter["random"].split("-")[1],
         ]
@@ -44,8 +44,23 @@ def url_generator(x: int, y: int, z: int, tile_name: str):
         )
     else:
         pass
-    #
-
+    # {retina} - Optional
+    if "retina" in parameter:
+        # Highest resolution prefer
+        url = url.replace(
+            "{retina}",
+            "@" + parameter["retina"][len(parameter["retina"]) - 1] + "x",
+        )
+    # {apikey} - Optional
+    if "apikey" in parameter:
+        url = url.replace("{apikey}", parameter["apikey"])
+    # {x} - Mandatory
+    url = url.replace("{x}", str(x))
+    # {y} - Mandatory
+    url = url.replace("{y}", str(y))
+    # {z} - Mandatory
+    url = url.replace("{z}", str(z))
+    return url
 
 def full_url(x: int, y: int, z: int, tile_name: str):
     # 开始组装准备
@@ -153,6 +168,7 @@ def requester_action_single(
     with open(filename, "wb") as f:
         f.write(img.content)
     print("[Thread 0][*] " + url)
+    print("[Thread 0][*] " + url_generator(x, y, z, tile_name))
 
 
 def requester_task(
