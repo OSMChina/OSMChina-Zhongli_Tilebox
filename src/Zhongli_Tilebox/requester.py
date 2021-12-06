@@ -142,20 +142,21 @@ def requester_task(
     if z>0:
         #import status
         #temp=Status("-1")
-        status_martix = [[-1] * z] * z
-        #status_martix=[[temp]*z]*z
+        status_martix = [[-1] * pow(2,z)] * pow(2,z)
+        #status_martix=[[temp]*pow(2,z)]*pow(2,z)
     else:
-        status_martix = [-1]
-    if os.path.exists(task_name+".status"):
+        status_martix = [[-1]]
+    if os.path.exists(task_name+".status") is not True:
         status_file=open(task_name+".status", "w")
-        for i in range(z):
-            for j in range(z):
+        for i in range(pow(2,z)):
+            for j in range(pow(2,z)):
                 status_file.write(str(status_martix[i][j])+" ")
             status_file.write("\n")
-        # status_file.close()
     else:
-        status_file=open(task_name+".status", "w")
-        status_martix=[[0]*z]*z
+        status_file=open(task_name+".status", "r")
+        for i in range(pow(2,z)):
+            for j in range(pow(2,z)):
+                status_martix[i]=status_file.readline().split(" ")
 
     # TASK_BODY
     for x in range(x_min, x_max):
@@ -184,9 +185,19 @@ def requester_task(
                 tmp.join()
                 delay = 0.05
                 time.sleep(delay)
+                if status_martix[x][y] == 0:
+                    status_martix[x][y] = 1
+                    # 应该在这里就调用一次记录器，而不是完成后
         os.chdir("..")
     os.chdir("..")
 
+    # 清空文件，再写入
+    status_file.close()
+    status_file=open(task_name+".status", "w")
+    for i in range(pow(2,z)):
+        for j in range(pow(2,z)):
+            status_file.write(str(status_martix[i][j]) + " ")
+        status_file.write("\n")
     status_file.close()
 
     time_end = time.time()
