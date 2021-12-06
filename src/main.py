@@ -74,6 +74,7 @@ def task_generator(
                 tile_name=tile_name,
                 task_name=task_name,
                 headers=headers,
+                allow_multi_processor=allow_multi_processor,
             )
         else:
             if x_min == 0 and x_max == 0 and y_min == 0 and y_max == 0:
@@ -107,6 +108,7 @@ def task_generator(
                 tile_name=tile_name,
                 task_name=task_name,
                 headers=headers,
+                allow_multi_processor=allow_multi_processor,
             )
         else:
             count = pow(2, zoom * 2)
@@ -132,7 +134,10 @@ def task_generator(
 if __name__ == "__main__":
     TASK_MODE = "Debug"
     # Suggested TASK_MODE: Backup, Debug, Development,PressureTest
-    os.system("mkdir OSMChina_" + TASK_MODE)
+    try:
+        os.mkdir("OSMChina_" + TASK_MODE)
+    except FileExistsError:
+        pass
     os.chdir("OSMChina_" + TASK_MODE)
     LOW_ZOOM = 0
     HIGH_ZOOM = 11
