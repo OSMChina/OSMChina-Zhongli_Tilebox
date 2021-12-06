@@ -5,8 +5,8 @@ import time
 
 import requests
 
-from src.main import TILE_SERVER
-from src.main import WHITE_LIST
+from src.config import TILE_SERVER
+from src.config import WHITE_LIST
 
 
 def get_random_char(begin: str, end: str):

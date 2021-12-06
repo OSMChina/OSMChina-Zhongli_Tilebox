@@ -1,12 +1,10 @@
 import os
 import platform
-import json
-from math import sqrt
 
 from Zhongli_Tilebox.requester import requester_task
+from Zhongli_Tilebox.combiner import combiner_task
+from Zhongli_Tilebox.viewer import viewer_task
 
-global WHITE_LIST
-global TILE_SERVER
 headers = {
     "User-Agent": "OSMChina-TileRequest/0.3.0",
     "Cookie": "",
@@ -51,20 +49,12 @@ def task_generator(
     allow_multi_processor=False,
 ):
     # INIT
-    global WHITE_LIST
-    global TILE_SERVER
     headers["User-Agent"] = useragent_generator()
-    if platform.system() == "Windows":
-        WHITE_LIST = json.loads(open("..\\res\\control_list.json").read())[
-            "WHITE_LIST"
-        ]
-        TILE_SERVER = json.loads(open("..\\res\\tile_server.json").read())
-    else:
-        WHITE_LIST = json.loads(open("../res/control_list.json").read())[
-            "WHITE_LIST"
-        ]
-        TILE_SERVER = json.loads(open("../res/tile_server.json").read())
-    # TASK
+    # TASK_CHOISE
+    if task=="requester":
+        pass
+    elif
+    # REQUESTER_TASK
     if mode == "Region":
         if zoom == 0:
             count = 1
