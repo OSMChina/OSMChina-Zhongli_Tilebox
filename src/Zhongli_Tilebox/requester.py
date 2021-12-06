@@ -62,6 +62,7 @@ def url_generator(x: int, y: int, z: int, tile_name: str):
     url = url.replace("{z}", str(z))
     return url
 
+
 def full_url(x: int, y: int, z: int, tile_name: str):
     # 开始组装准备
     url = TILE_SERVER[tile_name][0]
@@ -162,13 +163,12 @@ class Requester_Action_Thread(threading.Thread):
 def requester_action_single(
     x: int, y: int, z: int, tile_name: str, headers: dict
 ):
-    url = full_url(x, y, z, tile_name)
+    url = url_generator(x, y, z, tile_name)
     img = requests.get(url=url, headers=headers)
     filename = str(y) + ".png"
     with open(filename, "wb") as f:
         f.write(img.content)
     print("[Thread 0][*] " + url)
-    print("[Thread 0][*] " + url_generator(x, y, z, tile_name))
 
 
 def requester_task(
@@ -191,6 +191,19 @@ def requester_task(
     os.chdir(task_name)
 
     time_start = time.time()
+
+    # TASK_STATUS
+    if os.path.exists(task_name+".status"):
+        status_file=open(task_name+".status", "w")
+        status_martix=[[0]*z]*z
+        status_file.write(str(status_martix))
+        status_file.close()
+    else:
+        status_file=open(task_name+".status", "w")
+        status_martix=[[0]*z]*z
+        for i in range(x_min, x_max):
+            for j in range(y_min, y_max):
+                status_martix[i][j]=1
 
     # TASK_BODY
     for x in range(x_min, x_max):
