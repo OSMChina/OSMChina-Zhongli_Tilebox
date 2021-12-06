@@ -63,60 +63,6 @@ def url_generator(x: int, y: int, z: int, tile_name: str):
     return url
 
 
-def full_url(x: int, y: int, z: int, tile_name: str):
-    # 开始组装准备
-    url = TILE_SERVER[tile_name][0]
-    # 检查URL是否合法
-    for i in WHITE_LIST:
-        if i in url:
-            break
-    else:
-        print("Error: Not OSMChina tile service!")
-    # 复杂替换预配置
-    protocol_list = TILE_SERVER[tile_name][1]
-    if TILE_SERVER[tile_name][2] != "":
-        random_list = [
-            TILE_SERVER[tile_name][2].split("-")[0],
-            TILE_SERVER[tile_name][2].split("-")[1],
-        ]
-    else:
-        random_list = ""
-    # 组装协议
-    if protocol_list[0] == "https":
-        url = url.replace("{protocol}", "https://")
-    elif protocol_list[0] == "ftp":
-        url = url.replace("{protocol}", "ftp://")
-    else:
-        url = url.replace("{protocol}", "http://")
-    # 组装负载均衡
-    if random_list != "":
-        url = url.replace(
-            "{random}", get_random_char(random_list[0], random_list[1]) + "."
-        )
-    else:
-        url = url.replace("{random}", "")
-    # 组装瓦片坐标
-    url = url.replace("{x}", str(x))
-    url = url.replace("{y}", str(y))
-    url = url.replace("{z}", str(z))
-    # 组装Retina分辨率 优先最大分辨率
-    if TILE_SERVER[tile_name][3][0] != "":
-        url = url.replace(
-            "{retina}",
-            "@"
-            + TILE_SERVER[tile_name][3][len(TILE_SERVER[tile_name][3]) - 1]
-            + "x",
-        )
-    else:
-        url = url.replace("{retina}", "")
-    # 组装APIKEY
-    if TILE_SERVER[tile_name][4] != "":
-        url = url.replace("{apikey}", TILE_SERVER[tile_name][4])
-    else:
-        url = url.replace("{apikey}", "")
-    return url
-
-
 class Requester_Action_Thread(threading.Thread):
     # DEFAULT
     x = -1
@@ -146,7 +92,7 @@ class Requester_Action_Thread(threading.Thread):
 
     def run(self):
         try:
-            url = full_url(self.x, self.y, self.z, self.tile_name)
+            url = url_generator(self.x, self.y, self.z, self.tile_name)
             img = requests.get(url, headers=self.headers)
             filename = str(self.y) + ".png"
             with open(filename, "wb") as f:
@@ -193,17 +139,23 @@ def requester_task(
     time_start = time.time()
 
     # TASK_STATUS
+    if z>0:
+        #import status
+        #temp=Status("-1")
+        status_martix = [[-1] * z] * z
+        #status_martix=[[temp]*z]*z
+    else:
+        status_martix = [-1]
     if os.path.exists(task_name+".status"):
         status_file=open(task_name+".status", "w")
-        status_martix=[[0]*z]*z
-        status_file.write(str(status_martix))
-        status_file.close()
+        for i in range(z):
+            for j in range(z):
+                status_file.write(str(status_martix[i][j])+" ")
+            status_file.write("\n")
+        # status_file.close()
     else:
         status_file=open(task_name+".status", "w")
         status_martix=[[0]*z]*z
-        for i in range(x_min, x_max):
-            for j in range(y_min, y_max):
-                status_martix[i][j]=1
 
     # TASK_BODY
     for x in range(x_min, x_max):
@@ -223,6 +175,8 @@ def requester_task(
             # for i in range(y_min, y_max):
             #     QUEUE.append(i)
             for y in range(y_min, y_max):
+                # if status_martix[i][j]=1:
+                #     pass
                 tmp = Requester_Action_Thread(
                     x, y, z, tile_name, thread_id=y, headers=headers
                 )
@@ -232,6 +186,8 @@ def requester_task(
                 time.sleep(delay)
         os.chdir("..")
     os.chdir("..")
+
+    status_file.close()
 
     time_end = time.time()
     print("[TIME] " + task_name + ": " + str(time_end - time_start) + "s")
