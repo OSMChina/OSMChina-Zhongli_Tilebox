@@ -1,7 +1,7 @@
 {
   "Simple": {
-    "prototype": "{protocol}{random}tile.domain/{z}/{x}/{y}{retina}.png{apikey}",
-    "key": {
+    "url": "{protocol}{random}tile.domain/{z}/{x}/{y}{retina}.png{apikey}",
+    "parameter": {
       "protocol": [
         "https",
         "http"

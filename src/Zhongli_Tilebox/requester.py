@@ -15,7 +15,37 @@ def get_random_char(begin: str, end: str):
     return chr(ord(begin) + tmp)
 
 def url_generator(x: int, y: int, z: int, tile_name: str):
-    pass
+    # 开始组装准备
+    url=TILE_SERVER[tile_name]["url"]
+    # 检查URL是否合法
+    # 本部分同旧版
+    for i in WHITE_LIST:
+        if i in url:
+            break
+    else:
+        print("Error: Not OSMChina tile service!")
+    # 复杂替换开始
+    parameter=TILE_SERVER[tile_name]["parameter"]
+    # {protocol}
+    if parameter["protocol"][0] == "https":
+        url = url.replace("{protocol}", "https://")
+    elif parameter["protocol"][0] == "ftp":
+        url = url.replace("{protocol}", "ftp://")
+    else:
+        url = url.replace("{protocol}", "http://")
+    # {random}
+    if "random" in parameter:
+        random_list=[
+            parameter["random"].split("-")[0],
+            parameter["random"].split("-")[1],
+        ]
+        url = url.replace(
+            "{random}", get_random_char(random_list[0], random_list[1]) + "."
+        )
+    else:
+        pass
+    #
+
 
 def full_url(x: int, y: int, z: int, tile_name: str):
     # 开始组装准备
