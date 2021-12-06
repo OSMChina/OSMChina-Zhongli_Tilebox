@@ -12,15 +12,15 @@
 
 本项目有以下功能
 
-1. Zhongli_Tilebox.Request
+1. Zhongli_Tilebox.requester
 
    可以下载指定等级下，固定范围或全图的瓦片（完善中）
 
-2. Zhongli_Tilebox.Combiner
+2. Zhongli_Tilebox.combiner
 
    可以把一堆瓦片合并（在做了）
 
-3. Zhongli_Tilebox.Viewer
+3. Zhongli_Tilebox.viewer
 
    可以直接查看瓦片（在做了）
 

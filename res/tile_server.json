@@ -1,20 +1,23 @@
 {
-    "Simple": ["{protocol}{random}tile.domain/{z}/{x}/{y}{retina}.png{apikey}",
-               ["protocol", "http"],
-               "random",
-               ["retina"],
-               "apikey"
-               ],
-    "OSMChina": ["{protocol}{random}tile.osmchina.org/{z}/{x}/{y}{retina}.png{apikey}",
-                 ["https", "http"],
-                 "",
-                 [""],
-                 ""
-                 ],
-    "Teacestrack": ["{protocol}{random}tile.tracestrack.org/{z}/{x}/{y}{retina}.png{apikey}",
-                    ["https", "http"],
-                    "a-c",
-                    ["1.0", "1.5", "2.0"],
-                    "?apikey=9f8f8f8f-9f8f-9f8f-9f8f-9f8f8f8f8f8"
-                    ]
+    "Simple": [
+        "{protocol}{random}tile.domain/{z}/{x}/{y}{retina}.png{apikey}",
+        ["protocol", "http"],
+        "random",
+        ["retina"],
+        "apikey",
+    ],
+    "OSMChina": [
+        "{protocol}{random}tile.osmchina.org/{z}/{x}/{y}{retina}.png{apikey}",
+        ["https", "http"],
+        "",
+        [""],
+        "",
+    ],
+    "Teacestrack": [
+        "{protocol}{random}tile.tracestrack.org/{z}/{x}/{y}{retina}.png{apikey}",
+        ["https", "http"],
+        "a-c",
+        ["1.0", "1.5", "2.0"],
+        "?apikey=9f8f8f8f-9f8f-9f8f-9f8f-9f8f8f8f8f8",
+    ],
 }

@@ -7,6 +7,10 @@ from Zhongli_Tilebox.requester import requester_task
 
 global WHITE_LIST
 global TILE_SERVER
+headers = {
+    "User-Agent": "OSMChina-TileRequest/0.3.0",
+    "Cookie": "",
+}
 
 
 def UA():
@@ -30,12 +34,6 @@ def UA():
         + PLATFORM_PYTHON
     )
     return UA_BASIC + " " + UA_EXTEND
-
-
-headers = {
-    "User-Agent": "OSMChina-TileRequest/0.3.0",
-    "Cookie": "",
-}
 
 
 def taskGenerator(
@@ -69,7 +67,18 @@ def taskGenerator(
     # TASK
     if mode == "Region":
         if zoom == 0:
-            print("Error: zoom must be greater than 0 in Region mode")
+            count = 1
+            print("Total tiles:", count)
+            requester_task(
+                x_min=0,
+                x_max=0,
+                y_min=0,
+                y_max=0,
+                z=0,
+                tile_name=tile_name,
+                task_name=task_name,
+                headers=headers,
+            )
         else:
             if x_min == 0 and x_max == 0 and y_min == 0 and y_max == 0:
                 x_min = int(input("Please input x_min:"))
@@ -79,35 +88,46 @@ def taskGenerator(
             count = (x_max - x_min + 1) * (y_max - y_min + 1)
             print("Total tiles:", count)
             requester_task(
-                x_min,
-                x_max,
-                y_min,
-                y_max,
-                zoom,
-                tile_name,
-                task_name,
-                allow_multi_processor,
+                x_min=x_min,
+                x_max=x_max,
+                y_min=y_min,
+                y_max=y_max,
+                z=zoom,
+                tile_name=tile_name,
+                task_name=task_name,
+                headers=headers,
+                allow_multi_processor=allow_multi_processor,
             )
     elif mode == "Full":
         if zoom == 0:
             count = 1
             print("Total tiles:", count)
-            requester_task(0, 0, 0, 0, 0, tile_name, task_name, headers)
+            requester_task(
+                x_min=0,
+                x_max=0,
+                y_min=0,
+                y_max=0,
+                z=0,
+                tile_name=tile_name,
+                task_name=task_name,
+                headers=headers,
+            )
         else:
             count = pow(2, zoom * 2)
             print("Total tiles:", count)
             requester_task(
-                0,
-                pow(2, zoom) - 1,
-                0,
-                pow(2, zoom) - 1,
-                zoom,
-                tile_name,
-                task_name,
-                allow_multi_processor,
+                x_min=0,
+                x_max=pow(2, zoom) - 1,
+                y_min=0,
+                y_max=pow(2, zoom) - 1,
+                z=zoom,
+                tile_name=tile_name,
+                task_name=task_name,
+                headers=headers,
+                allow_multi_processor=allow_multi_processor,
             )
     elif mode == "Grid":
-        full_length=pow(2,zoom)
+        full_length = pow(2, zoom)
         full_count = pow(2, zoom * 2)
     else:
         print("Error: mode Error")
