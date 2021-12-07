@@ -144,7 +144,7 @@ if __name__ == "__main__":
     except FileExistsError:
         pass
     os.chdir("OSMChina_" + TASK_MODE)
-    LOW_ZOOM = 1
+    LOW_ZOOM = 0
     HIGH_ZOOM = 11
     for i in range(LOW_ZOOM, HIGH_ZOOM + 1):
         task_generator(

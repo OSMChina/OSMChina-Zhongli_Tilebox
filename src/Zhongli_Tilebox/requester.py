@@ -63,8 +63,9 @@ def url_generator(x: int, y: int, z: int, tile_name: str):
     return url
 
 
-def status_rebuilder(z:int):
+def status_rebuilder(z: int):
     pass
+
 
 class Requester_Action_Thread(threading.Thread):
     # DEFAULT
@@ -145,25 +146,22 @@ def requester_task(
     if z > 0:
         # import status
         # temp=Status("-1")
-        status_martix = [[-1] * pow(2, z) for i in range( pow(2, z))]
-        # status_martix=[[temp] * pow(2, z) for i in range( pow(2, z))]
+        status_matrix = [[-1] * pow(2, z) for i in range(pow(2, z))]
+        # status_matrix=[[temp] * pow(2, z) for i in range( pow(2, z))]
     else:
-        status_martix = [[-1]]
+        status_matrix = [[-1]]
     if os.path.exists(task_name + ".status") is not True:
         status_file = open(task_name + ".status", "w")
         for i in range(pow(2, z)):
             for j in range(pow(2, z)):
-                status_file.write(str(status_martix[i][j]) + " ")
+                status_file.write(str(status_matrix[i][j]) + " ")
             status_file.write("\n")
     else:
         status_file = open(task_name + ".status", "r")
         for i in range(pow(2, z)):
-            status_line=status_file.readline().split(" ")
-            print(status_line)
+            status_line = status_file.readline().split(" ")
             for j in range(pow(2, z)):
-                #status_martix[i] = status_file.readline().split(" ")
-                # print(status_file.readline().split(" "))
-                status_martix[i][j] = int(status_line[j])
+                status_matrix[i][j] = int(status_line[j])
 
     # TASK_BODY
     for x in range(x_min, x_max):
@@ -173,9 +171,8 @@ def requester_task(
             pass
         os.chdir(str(x))
         for y in range(y_min, y_max):
-            print(status_martix)#(only for debug)
             if allow_multi_processor is False:
-                if status_martix[x][y] == 1:
+                if status_matrix[x][y] == 1:
                     continue
                 else:
                     requester_action_single(x, y, z, tile_name, headers)
@@ -186,7 +183,7 @@ def requester_task(
                 # QUEUE = []
                 # for i in range(y_min, y_max):
                 #     QUEUE.append(i)
-                if status_martix[x][y] == 1:
+                if status_matrix[x][y] == 1:
                     continue
                 else:
                     tmp = Requester_Action_Thread(
@@ -197,8 +194,8 @@ def requester_task(
                     delay = 0.05
                     time.sleep(delay)
             # 不管单线程还是多线程先假设都完成了
-            if status_martix[x][y] != 1:
-                status_martix[x][y] = 1
+            if status_matrix[x][y] != 1:
+                status_matrix[x][y] = 1
         os.chdir("..")
 
         # 为节约IO，在每个x的一列结束后写入一次status
@@ -207,11 +204,13 @@ def requester_task(
         status_file = open(task_name + ".status", "w")
         for i in range(pow(2, z)):
             for j in range(pow(2, z)):
-                status_file.write(str(status_martix[i][j]) + " ")
+                status_file.write(str(status_matrix[i][j]) + " ")
             status_file.write("\n")
         status_file.close()
 
     os.chdir("..")
 
     time_end = time.time()
-    print("[TIME] " + task_name + ": " + str(time_end - time_start) + "s"+"\n")
+    print(
+        "[TIME] " + task_name + ": " + str(time_end - time_start) + "s" + "\n"
+    )
