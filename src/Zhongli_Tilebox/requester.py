@@ -165,31 +165,35 @@ def requester_task(
         except FileExistsError:
             pass
         os.chdir(str(x))
-        if allow_multi_processor is False:
-            for y in range(y_min, y_max):
-                requester_action_single(x, y, z, tile_name, headers)
-        else:
-            # MAX_CONNECTION = 16
-            # MIN_CONNECTION = 1
-            # SEMAPHORE_POOL = threading.BoundedSemaphore(MAX_CONNECTION)
-            # QUEUE = []
-            # for i in range(y_min, y_max):
-            #     QUEUE.append(i)
-            for y in range(y_min, y_max):
-                if status_martix[i][j]==1:
-                    pass
-                tmp = Requester_Action_Thread(
-                    x, y, z, tile_name, thread_id=y, headers=headers
-                )
-                tmp.start()
-                tmp.join()
-                delay = 0.05
-                time.sleep(delay)
-                if status_martix[x][y] != 1:
-                    status_martix[x][y] = 1
+        for y in range(y_min, y_max):
+            if allow_multi_processor is False:
+                if status_martix[x][y] == 1:
+                    continue
+                else:
+                    requester_action_single(x, y, z, tile_name, headers)
+            else:
+                # MAX_CONNECTION = 16
+                # MIN_CONNECTION = 1
+                # SEMAPHORE_POOL = threading.BoundedSemaphore(MAX_CONNECTION)
+                # QUEUE = []
+                # for i in range(y_min, y_max):
+                #     QUEUE.append(i)
+                if status_martix[x][y] == 1:
+                    continue
+                else:
+                    tmp = Requester_Action_Thread(
+                        x, y, z, tile_name, thread_id=y, headers=headers
+                    )
+                    tmp.start()
+                    tmp.join()
+                    delay = 0.05
+                    time.sleep(delay)
+            # 不管单线程还是多线程先假设都完成了
+            if status_martix[x][y] != 1:
+                status_martix[x][y] = 1
         os.chdir("..")
 
-        # 为节约IO，在每个x结束后写入一次status
+        # 为节约IO，在每个x的一列结束后写入一次status
         # 清空文件，再写入
         status_file.close()
         status_file = open(task_name + ".status", "w")
@@ -202,4 +206,4 @@ def requester_task(
     os.chdir("..")
 
     time_end = time.time()
-    print("[TIME] " + task_name + ": " + str(time_end - time_start) + "s")
+    print("[TIME] " + task_name + ": " + str(time_end - time_start) + "s"+"\n")
