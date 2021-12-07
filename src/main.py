@@ -1,5 +1,6 @@
 import os
 import platform
+from time import sleep
 
 from Zhongli_Tilebox.requester import requester_task
 from Zhongli_Tilebox.requester import status_rebuilder
@@ -132,6 +133,7 @@ def task_generator(
             z=zoom,
             task_name=task_name,
         )
+        sleep(1)
     else:
         print("Task Error!")
         return
@@ -149,7 +151,7 @@ if __name__ == "__main__":
     HIGH_ZOOM = 11
     for i in range(LOW_ZOOM, HIGH_ZOOM + 1):
         task_generator(
-            task="requester",
+            task="rebuild_status",
             zoom=i,
             tile_name="OSMChina",
             task_name="OSMChina_" + TASK_MODE + "_" + str(i),
