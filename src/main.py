@@ -2,6 +2,7 @@ import os
 import platform
 
 from Zhongli_Tilebox.requester import requester_task
+from Zhongli_Tilebox.requester import status_rebuilder
 from Zhongli_Tilebox.combiner import combiner_task
 from Zhongli_Tilebox.viewer import viewer_task
 
@@ -126,6 +127,10 @@ def task_generator(
         combiner_task()
     elif task == "viewer":
         viewer_task()
+    elif task == "rebuild_status":
+        status_rebuilder(
+            z=zoom,
+        )
     else:
         print("Task Error!")
         return
@@ -139,7 +144,7 @@ if __name__ == "__main__":
     except FileExistsError:
         pass
     os.chdir("OSMChina_" + TASK_MODE)
-    LOW_ZOOM = 0
+    LOW_ZOOM = 1
     HIGH_ZOOM = 11
     for i in range(LOW_ZOOM, HIGH_ZOOM + 1):
         task_generator(

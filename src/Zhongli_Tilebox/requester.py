@@ -63,6 +63,9 @@ def url_generator(x: int, y: int, z: int, tile_name: str):
     return url
 
 
+def status_rebuilder(z:int):
+    pass
+
 class Requester_Action_Thread(threading.Thread):
     # DEFAULT
     x = -1
@@ -142,8 +145,8 @@ def requester_task(
     if z > 0:
         # import status
         # temp=Status("-1")
-        status_martix = [[-1] * pow(2, z)] * pow(2, z)
-        # status_martix=[[temp]*pow(2,z)]*pow(2,z)
+        status_martix = [[-1] * pow(2, z) for i in range( pow(2, z))]
+        # status_martix=[[temp] * pow(2, z) for i in range( pow(2, z))]
     else:
         status_martix = [[-1]]
     if os.path.exists(task_name + ".status") is not True:
@@ -155,8 +158,12 @@ def requester_task(
     else:
         status_file = open(task_name + ".status", "r")
         for i in range(pow(2, z)):
+            status_line=status_file.readline().split(" ")
+            print(status_line)
             for j in range(pow(2, z)):
-                status_martix[i] = status_file.readline().split(" ")
+                #status_martix[i] = status_file.readline().split(" ")
+                # print(status_file.readline().split(" "))
+                status_martix[i][j] = int(status_line[j])
 
     # TASK_BODY
     for x in range(x_min, x_max):
@@ -166,6 +173,7 @@ def requester_task(
             pass
         os.chdir(str(x))
         for y in range(y_min, y_max):
+            print(status_martix)#(only for debug)
             if allow_multi_processor is False:
                 if status_martix[x][y] == 1:
                     continue
