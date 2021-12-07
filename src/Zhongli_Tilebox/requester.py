@@ -5,8 +5,8 @@ import time
 
 import requests
 
-from src.config import TILE_SERVER
-from src.config import WHITE_LIST
+from config import TILE_SERVER
+from config import WHITE_LIST
 
 
 def get_random_char(begin: str, end: str):
@@ -71,7 +71,6 @@ def status_rebuilder(z: int,task_name:str):
         os.chdir(task_name)
     except FileNotFoundError:
         # 没找到目录，整文件填0
-        print(z, " ", os.getcwd())
         os.mkdir(task_name)
         os.chdir(task_name)
         for i in range(pow(2, z)):
