@@ -130,6 +130,7 @@ def task_generator(
     elif task == "rebuild_status":
         status_rebuilder(
             z=zoom,
+            task_name=task_name,
         )
     else:
         print("Task Error!")

@@ -63,8 +63,24 @@ def url_generator(x: int, y: int, z: int, tile_name: str):
     return url
 
 
-def status_rebuilder(z: int):
-    pass
+def status_rebuilder(z: int,task_name:str):
+    os.chdir(task_name)
+    status_matrix=[[-1]* pow(2,z) for i in range(pow(2,z))]
+    for x in range(pow(2,z)):
+        if os.path.exists(str(x)):
+            os.chdir(str(x))
+        else:
+            for j in range(pow(2,z)):
+                status_matrix[x][j] = 0
+        for y in range(pow(2,z)):
+            if os.path.exists(str(y) + ".png"):
+                status_matrix[x][y] = 1
+            else:
+                status_matrix[x][y] = 0
+        os.chdir("..")
+
+
+
 
 
 class Requester_Action_Thread(threading.Thread):
