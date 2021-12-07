@@ -66,8 +66,6 @@ def url_generator(x: int, y: int, z: int, tile_name: str):
 def status_rebuilder(z: int,task_name:str):
     # INIT
     status_matrix = [[-1] * pow(2, z) for i in range(pow(2, z))]
-    print(z," ", os.getcwd())
-
     # FIND
     try:
         os.chdir(task_name)
@@ -104,7 +102,6 @@ def status_rebuilder(z: int,task_name:str):
                 status_matrix[x][y] = 0
         os.chdir("..")
     # SAVE
-    print(z," ", os.getcwd())
     status_file = open(task_name + ".status", "w")
     for i in range(pow(2, z)):
         for j in range(pow(2, z)):
@@ -112,7 +109,6 @@ def status_rebuilder(z: int,task_name:str):
         status_file.write("\n")
     status_file.close()
     os.chdir("..")
-    print(status_matrix)
     return
 
 
