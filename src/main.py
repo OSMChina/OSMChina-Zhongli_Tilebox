@@ -1,6 +1,8 @@
 import os
 import platform
 
+from PIL import Image
+
 from Zhongli_Tilebox.requester import requester_task
 from Zhongli_Tilebox.requester import status_rebuilder
 from Zhongli_Tilebox.combiner import combiner_task
@@ -11,6 +13,13 @@ headers = {
     "Cookie": "",
 }
 
+def image_validator(file):
+    valid = True
+    try:
+        Image.open(file).load()
+    except OSError:
+        valid = False
+    return valid
 
 def useragent_generator():
     PROGRAMME_NAME = "OSMChina-TileRequest"
@@ -38,14 +47,15 @@ def useragent_generator():
 def task_generator(
     task: str,
     zoom: int,
-    tile_name: str,
     task_name: str,
+    tile_name="OSMChina",
     x_min=0,
     x_max=0,
     y_min=0,
     y_max=0,
     grid_pos_x=0,
     grid_pos_y=0,
+    restrict=7,
     mode="Region",
     allow_multi_processor=False,
 ):
@@ -120,7 +130,46 @@ def task_generator(
         elif mode == "Grid":
             full_length = pow(2, zoom)
             full_count = pow(2, zoom * 2)
-            print(grid_pos_x, grid_pos_y)
+            print("Full length:", full_length)
+            print("Full count:", full_count)
+            if zoom<restrict:
+                grid_length=0
+                grid_count=0
+                step = 0
+                print("Step:", step)
+            elif zoom == restrict:
+                grid_length=pow(2,0)
+                grid_count=1
+                step = full_length / grid_length
+                print("Step:", step)
+            else:
+                # zoom>restrict
+                grid_length=pow(2,pow(2,zoom-(restrict+1)))
+                grid_count=pow(grid_length,2)
+                step = full_length / grid_length
+                print("Step:", step)
+            print("Grid length:", grid_length)
+            print("Grid count:", grid_count)
+
+            x_min = 0 + step * grid_pos_x
+            x_max = 0 + step * (grid_pos_x + 1) - 1
+            y_min = 0 + step * grid_pos_y
+            y_max = 0 + step * (grid_pos_y + 1) - 1
+            print("xmin,xmax,ymin,ymax ",x_min, x_max, y_min, y_max)
+            count = (x_max - x_min + 1) * (y_max - y_min + 1)
+            print("Total tiles:", count)
+            print("\n")
+            # requester_task(
+            #     x_min=x_min,
+            #     x_max=x_max,
+            #     y_min=y_min,
+            #     y_max=y_max,
+            #     z=zoom,
+            #     tile_name=tile_name,
+            #     task_name=task_name,
+            #     headers=headers,
+            #     allow_multi_processor=allow_multi_processor,
+            # )
         else:
             print("Error: mode Error")
     elif task == "combiner":
@@ -145,14 +194,29 @@ if __name__ == "__main__":
     except FileExistsError:
         pass
     os.chdir("OSMChina_" + TASK_MODE)
-    LOW_ZOOM = 0
+    LOW_ZOOM = 6
     HIGH_ZOOM = 9
     for i in range(LOW_ZOOM, HIGH_ZOOM + 1):
+        # task_generator(
+        #     task="rebuild_status",
+        #     zoom=i,
+        #     task_name="OSMChina_" + TASK_MODE + "_" + str(i),
+        # )
+        # task_generator(
+        #     task="requester",
+        #     zoom=i,
+        #     tile_name="OSMChina",
+        #     task_name="OSMChina_" + TASK_MODE + "_" + str(i),
+        #     mode="Full",
+        #     allow_multi_processor=False,
+        # )
         task_generator(
             task="requester",
             zoom=i,
             tile_name="OSMChina",
             task_name="OSMChina_" + TASK_MODE + "_" + str(i),
-            mode="Full",
+            mode="Grid",
+            grid_pos_x=0,
+            grid_pos_y=0,
             allow_multi_processor=False,
         )
