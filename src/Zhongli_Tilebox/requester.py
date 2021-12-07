@@ -139,24 +139,24 @@ def requester_task(
     time_start = time.time()
 
     # TASK_STATUS
-    if z>0:
-        #import status
-        #temp=Status("-1")
-        status_martix = [[-1] * pow(2,z)] * pow(2,z)
-        #status_martix=[[temp]*pow(2,z)]*pow(2,z)
+    if z > 0:
+        # import status
+        # temp=Status("-1")
+        status_martix = [[-1] * pow(2, z)] * pow(2, z)
+        # status_martix=[[temp]*pow(2,z)]*pow(2,z)
     else:
         status_martix = [[-1]]
-    if os.path.exists(task_name+".status") is not True:
-        status_file=open(task_name+".status", "w")
-        for i in range(pow(2,z)):
-            for j in range(pow(2,z)):
-                status_file.write(str(status_martix[i][j])+" ")
+    if os.path.exists(task_name + ".status") is not True:
+        status_file = open(task_name + ".status", "w")
+        for i in range(pow(2, z)):
+            for j in range(pow(2, z)):
+                status_file.write(str(status_martix[i][j]) + " ")
             status_file.write("\n")
     else:
-        status_file=open(task_name+".status", "r")
-        for i in range(pow(2,z)):
-            for j in range(pow(2,z)):
-                status_martix[i]=status_file.readline().split(" ")
+        status_file = open(task_name + ".status", "r")
+        for i in range(pow(2, z)):
+            for j in range(pow(2, z)):
+                status_martix[i] = status_file.readline().split(" ")
 
     # TASK_BODY
     for x in range(x_min, x_max):
@@ -176,8 +176,8 @@ def requester_task(
             # for i in range(y_min, y_max):
             #     QUEUE.append(i)
             for y in range(y_min, y_max):
-                # if status_martix[i][j]=1:
-                #     pass
+                if status_martix[i][j]==1:
+                    pass
                 tmp = Requester_Action_Thread(
                     x, y, z, tile_name, thread_id=y, headers=headers
                 )
@@ -185,20 +185,21 @@ def requester_task(
                 tmp.join()
                 delay = 0.05
                 time.sleep(delay)
-                if status_martix[x][y] == 0:
+                if status_martix[x][y] != 1:
                     status_martix[x][y] = 1
-                    # 应该在这里就调用一次记录器，而不是完成后
         os.chdir("..")
-    os.chdir("..")
 
-    # 清空文件，再写入
-    status_file.close()
-    status_file=open(task_name+".status", "w")
-    for i in range(pow(2,z)):
-        for j in range(pow(2,z)):
-            status_file.write(str(status_martix[i][j]) + " ")
-        status_file.write("\n")
-    status_file.close()
+        # 为节约IO，在每个x结束后写入一次status
+        # 清空文件，再写入
+        status_file.close()
+        status_file = open(task_name + ".status", "w")
+        for i in range(pow(2, z)):
+            for j in range(pow(2, z)):
+                status_file.write(str(status_martix[i][j]) + " ")
+            status_file.write("\n")
+        status_file.close()
+
+    os.chdir("..")
 
     time_end = time.time()
     print("[TIME] " + task_name + ": " + str(time_end - time_start) + "s")
