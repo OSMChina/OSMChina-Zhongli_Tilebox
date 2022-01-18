@@ -28,38 +28,37 @@ def url_generator(x: int, y: int, z: int, tile_name: str):
     parameter = TILE_SERVER[tile_name]["parameter"]
     # {protocol} - Mandatory
     if parameter["protocol"][0] == "https":
-        url = url.replace("{protocol}", "https://")
+        url = url.format(protocol="https://")
     elif parameter["protocol"][0] == "ftp":
-        url = url.replace("{protocol}", "ftp://")
+        url = url.format(protocol="ftp://")
     else:
-        url = url.replace("{protocol}", "http://")
+        url = url.format(protocol="http://")
     # {random} - Optional
     if "random" in parameter:
         random_list = [
             parameter["random"].split("-")[0],
             parameter["random"].split("-")[1],
         ]
-        url = url.replace(
-            "{random}", get_random_char(random_list[0], random_list[1]) + "."
+        url = url.format(
+            random=get_random_char(random_list[0], random_list[1]) + "."
         )
     else:
         pass
     # {retina} - Optional
     if "retina" in parameter:
         # Highest resolution prefer
-        url = url.replace(
-            "{retina}",
-            "@" + parameter["retina"][len(parameter["retina"]) - 1] + "x",
+        url = url.format(
+            retina="@" + parameter["retina"][len(parameter["retina"]) - 1] + "x",
         )
     # {apikey} - Optional
     if "apikey" in parameter:
-        url = url.replace("{apikey}", parameter["apikey"])
+        url = url.format(apikey=parameter["apikey"])
     # {x} - Mandatory
-    url = url.replace("{x}", str(x))
+    url = url.format(x=str(x))
     # {y} - Mandatory
-    url = url.replace("{y}", str(y))
+    url = url.format(y=str(y))
     # {z} - Mandatory
-    url = url.replace("{z}", str(z))
+    url = url.format(z=str(z))
     return url
 
 
