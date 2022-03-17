@@ -8,6 +8,13 @@ import requests
 from config import TILE_SERVER
 from config import WHITE_LIST
 
+def no_proxy():
+    domain="osmchina.org"
+    # If meet with this Error like this:
+    # requests.exceptions.SSLError: HTTPSConnectionPool(host='https://domain', port=443): Max retries exceeded with url:
+    # (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:997)')))
+    os.environ['NO_PROXY']= domain
+
 
 def get_random_char(begin: str, end: str):
     char_range = int(ord(end) - ord(begin))
