@@ -4,6 +4,7 @@
 <!-- ![FOSSA Status] -->
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 <!-- ![BLACK PYTHON STYLE] -->
+[![CodeFactor](https://www.codefactor.io/repository/github/laoshubaby/osmchina-zhongli_tilebox/badge)](https://www.codefactor.io/repository/github/laoshubaby/osmchina-zhongli_tilebox)
 
 ## 介绍
 
