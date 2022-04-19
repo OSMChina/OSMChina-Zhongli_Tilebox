@@ -102,6 +102,7 @@ task_generator(
     - [ ] 引入Grid模式
         - [ ] 支持按照给定子任务作业
         - [ ] 支持自动拆分子任务
+- [] 支持谷歌格式，详见（https://www.maptiler.com/google-maps-coordinates-tile-bounds-projection）
 
 ## 承诺
 
