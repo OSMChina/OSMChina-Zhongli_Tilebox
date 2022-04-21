@@ -6,6 +6,9 @@
         "https",
         "http"
       ]
+    },
+    "config":{
+      "google_style_tilenum":"false"
     }
   },
   "Teacestrack": {
@@ -22,6 +25,21 @@
         "2.0"
       ],
       "apikey":"9f8f8f8f-9f8f-9f8f-9f8f-9f8f8f8f8f8"
+    },
+    "config":{
+      "google_style_tilenum":"false"
+    }
+  },
+  "Google":{
+    "url": "https://mt{s}.google.com/vt/lyrs=m@207000000&hl=en&x={x}&y={y}&z={z}",
+    "_comment":"This url is given by GitHub Copilot, it don't means we ensure this available or we encourage you try it",
+    "parameter": {
+      "s": [
+        "0-3"
+      ]
+    },
+    "config":{
+      "google_style_tilenum":"true"
     }
   }
 }
