@@ -1,7 +1,7 @@
 {
     "control_list":[
         {
-            "control":"WHITE_LIST",
+            "control":"ALLOW_LIST",
             "type":"domain",
             "name":"OSMChina",
             "content":{
@@ -9,15 +9,16 @@
             }
         },
         {
-            "control":"BLACK_LIST",
+            "control":"DENY_LIST",
             "type":"domain",
             "name":"OpenStreetMap Official",
+            "_comment":"Every in https://github.com/openstreetmap/dns/blob/master/dnsconfig.js should be banned.",
             "content":{
-                "domain":["openstreetmap.org","osm.org"]
+                "domain":["openstreetmap.org","openstreetmap.com","osm.org"]
             }
         },
         {
-            "control":"BLACK_LIST",
+            "control":"DENY_LIST",
             "type":"apikey",
             "name":"Thunderforest (OpenStreetMap Official owned)",
             "content":{
@@ -25,7 +26,7 @@
             }
         },
         {
-            "control":"BLACK_LIST",
+            "control":"DENY_LIST",
             "type":"apikey",
             "name":"Tracemap (OSMChina owned)",
             "content":{
