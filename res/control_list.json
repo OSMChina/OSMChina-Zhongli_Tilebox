@@ -1,6 +1,36 @@
 {
-    "ALLOW": "WHITE_LIST",
-    "DENY": "BLACK_LIST",
-    "WHITE_LIST": ["osmchina.org"],
-    "BLACK_LIST": []
+    "control_list":[
+        {
+            "control":"WHITE_LIST",
+            "type":"domain",
+            "name":"OSMChina",
+            "content":{
+                "domain":["osmchina.org"]
+            }
+        },
+        {
+            "control":"BLACK_LIST",
+            "type":"domain",
+            "name":"OpenStreetMap Official",
+            "content":{
+                "domain":["openstreetmap.org","osm.org"]
+            }
+        },
+        {
+            "control":"BLACK_LIST",
+            "type":"apikey",
+            "name":"Thunderforest (OpenStreetMap Official owned)",
+            "content":{
+                "apikey":["114514","1919810"]
+            }
+        },
+        {
+            "control":"BLACK_LIST",
+            "type":"apikey",
+            "name":"Tracemap (OSMChina owned)",
+            "content":{
+                "apikey":["114514","1919810"]
+            }
+        }
+    ]
 }
