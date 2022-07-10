@@ -8,7 +8,7 @@
       ]
     },
     "config":{
-      "google_style_tilenum":"false"
+      "unpyramidal_tileindex_system":"none"
     }
   },
   "Teacestrack": {
@@ -27,7 +27,7 @@
       "apikey":"9f8f8f8f-9f8f-9f8f-9f8f-9f8f8f8f8f8"
     },
     "config":{
-      "google_style_tilenum":"false"
+      "unpyramidal_tileindex_system":"none"
     }
   },
   "Google":{
@@ -39,7 +39,7 @@
       ]
     },
     "config":{
-      "google_style_tilenum":"true"
+      "unpyramidal_tileindex_system":"google"
     }
   }
 }
