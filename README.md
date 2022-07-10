@@ -80,6 +80,7 @@ task_generator(
 ## TODO
 
 - [ ] UA重做
+- [ ] 配置文件分离（不用每次改main.py，先检查本地其他文件）
 - [ ] 多组件
     - [x] 多组件-模块化
     - [x] 多组件-数据源分离
@@ -102,7 +103,8 @@ task_generator(
     - [ ] 引入Grid模式
         - [ ] 支持按照给定子任务作业
         - [ ] 支持自动拆分子任务
-- [] 支持谷歌格式，详见（https://www.maptiler.com/google-maps-coordinates-tile-bounds-projection）
+- [] 支持多种不同的瓦片索引数
+    - [ ] 谷歌格式（https://www.maptiler.com/google-maps-coordinates-tile-bounds-projection）
 
 ## 承诺
 
