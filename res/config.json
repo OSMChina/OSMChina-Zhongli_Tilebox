@@ -1,0 +1,9 @@
+{
+    "task":"requester",
+    "zoom":18,
+    "tile_name":"OSMChina",
+    "mode":"Grid",
+    "grid_pos_x":0,
+    "grid_pos_y":0,
+    "allow_multi_processor":"False"
+}

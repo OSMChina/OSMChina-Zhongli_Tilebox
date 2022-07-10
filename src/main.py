@@ -210,6 +210,7 @@ if __name__ == "__main__":
         #     mode="Full",
         #     allow_multi_processor=False,
         # )
+        # try to load /res/config.json, if failed then use below default value
         task_generator(
             task="requester",
             zoom=i,
