@@ -82,7 +82,8 @@ task_generator(
 - [ ] UA重做
 - [ ] 配置文件分离（不用每次改main.py，先检查本地其他文件）
 - [ ] 多组件
-    - [x] 多组件-模块化
+    - [ ] 多组件-模块化
+        - [ ] 多组件-对图片合并模型进行设计，使之允许用ImageMagick/PIL/OpenCV/python=photoshop等多种本地可行的方式合并图片
     - [x] 多组件-数据源分离
     - [ ] 多组件-Combiner
     - [ ] 多组件-Viewer
